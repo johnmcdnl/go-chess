@@ -1,6 +1,10 @@
 package chess
 
 const (
+	NoPiece = 0
+)
+
+const (
 	_ = iota
 	PieceTypePawn
 	PieceTypeKnight
