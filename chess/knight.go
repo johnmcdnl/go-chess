@@ -14,8 +14,9 @@ func NewKnight(currentPosition *Square, color int) *Knight {
 }
 func (b *Knight) ValidMoves() *Moves {
 	var moves = new(Moves)
-	moves.CurrentSquare = b.CurrentPosition
-
+	var m = Move{
+		From: b.CurrentPosition,
+	}
 	cFile := b.CurrentPosition.FileLetter
 	cRank := b.CurrentPosition.RankNumber
 
@@ -23,11 +24,7 @@ func (b *Knight) ValidMoves() *Moves {
 	tFile := cFile + 1
 	tRank := cRank + 2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 
@@ -35,11 +32,7 @@ func (b *Knight) ValidMoves() *Moves {
 	tFile = cFile - 1
 	tRank = cRank + 2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 
@@ -48,22 +41,14 @@ func (b *Knight) ValidMoves() *Moves {
 	tFile = cFile + 1
 	tRank = cRank -2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 	//RankDown2FileUp1
 	tFile = cFile + 1
 	tRank = cRank - 2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 
@@ -72,22 +57,14 @@ func (b *Knight) ValidMoves() *Moves {
 	tFile = cFile - 2
 	tRank = cRank + 1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 	//FileDown2RankDown1
 	tFile = cFile - 2
 	tRank = cRank - 1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 
@@ -95,22 +72,14 @@ func (b *Knight) ValidMoves() *Moves {
 	tFile = cFile +2
 	tRank = cRank +1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 	//FileUp2RankDown1
 	tFile = cFile +2
 	tRank = cRank -1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		s := GlobalBoard.GetSquare(tFile, tRank)
-		var m = Move{
-			From: b.CurrentPosition,
-			To:   s,
-		}
+		m.To = GlobalBoard.GetSquare(tFile, tRank)
 		moves.BestMoves = append(moves.BestMoves, &m)
 	}
 

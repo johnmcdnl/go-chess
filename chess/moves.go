@@ -3,7 +3,6 @@ package chess
 import "fmt"
 
 type Moves struct {
-	CurrentSquare *Square
 	PossibleMoves []*Square
 	BestMoves     []*Move
 }

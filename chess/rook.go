@@ -14,8 +14,6 @@ func NewRook(currentPosition *Square, color int) *Rook {
 func (r *Rook) ValidMoves() *Moves {
 	var moves = new(Moves)
 
-	moves.CurrentSquare = r.CurrentPosition
-
 	//vertical
 	currentFile := r.GetPiece().CurrentPosition.FileLetter
 	for i := 1; i <= 8; i++ {

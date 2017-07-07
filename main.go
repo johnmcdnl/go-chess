@@ -13,7 +13,9 @@ func main() {
 
 	for _, square := range b.Squares {
 		if square.CurrentPiece != nil {
-			square.CurrentPiece.ValidMoves()
+			for _, m := range square.CurrentPiece.ValidMoves().BestMoves{
+				fmt.Println(m.Name())
+			}
 		}
 	}
 }
