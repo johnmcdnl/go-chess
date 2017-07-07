@@ -25,7 +25,7 @@ func (k *Knight) ValidMoves() *Moves {
 	tRank := cRank + 2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 
 	//RankUp2FileDown1
@@ -33,7 +33,7 @@ func (k *Knight) ValidMoves() *Moves {
 	tRank = cRank + 2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 
 
@@ -42,14 +42,14 @@ func (k *Knight) ValidMoves() *Moves {
 	tRank = cRank -2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 	//RankDown2FileUp1
 	tFile = cFile + 1
 	tRank = cRank - 2
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 
 
@@ -58,14 +58,14 @@ func (k *Knight) ValidMoves() *Moves {
 	tRank = cRank + 1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 	//FileDown2RankDown1
 	tFile = cFile - 2
 	tRank = cRank - 1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 
 	//FileUp2RankUp1
@@ -73,14 +73,14 @@ func (k *Knight) ValidMoves() *Moves {
 	tRank = cRank +1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 	//FileUp2RankDown1
 	tFile = cFile +2
 	tRank = cRank -1
 	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, &m)
+		moves.BestMoves = append(moves.BestMoves, m)
 	}
 
 

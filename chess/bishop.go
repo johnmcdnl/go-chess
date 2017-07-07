@@ -27,7 +27,7 @@ func (b *Bishop) ValidMoves() *Moves {
 
 		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, &m)
+			moves.BestMoves = append(moves.BestMoves, m)
 		}
 	}
 	//right up      file up, rank up
@@ -40,7 +40,7 @@ func (b *Bishop) ValidMoves() *Moves {
 
 		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, &m)
+			moves.BestMoves = append(moves.BestMoves, m)
 		}
 	}
 
@@ -54,7 +54,7 @@ func (b *Bishop) ValidMoves() *Moves {
 
 		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, &m)
+			moves.BestMoves = append(moves.BestMoves, m)
 		}
 	}
 
@@ -68,7 +68,7 @@ func (b *Bishop) ValidMoves() *Moves {
 
 		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
 			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, &m)
+			moves.BestMoves = append(moves.BestMoves, m)
 		}
 	}
 

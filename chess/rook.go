@@ -23,7 +23,7 @@ func (r *Rook) ValidMoves() *Moves {
 	for i := 1; i <= 8; i++ {
 		if i != currentFile {
 			m.To = GlobalBoard.GetSquare(i, r.CurrentPosition.RankNumber)
-			moves.BestMoves = append(moves.BestMoves, &m)
+			moves.BestMoves = append(moves.BestMoves, m)
 		}
 	}
 
@@ -32,7 +32,7 @@ func (r *Rook) ValidMoves() *Moves {
 	for i := 1; i <= 8; i++ {
 		if i != currentRank {
 			m.To = GlobalBoard.GetSquare(r.CurrentPosition.FileLetter, i)
-			moves.BestMoves = append(moves.BestMoves, &m)
+			moves.BestMoves = append(moves.BestMoves, m)
 		}
 	}
 

@@ -4,7 +4,7 @@ import "fmt"
 
 type Moves struct {
 	PossibleMoves []*Square
-	BestMoves     []*Move
+	BestMoves     []Move
 }
 
 type Move struct {

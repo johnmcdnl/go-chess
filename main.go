@@ -12,7 +12,7 @@ func main() {
 	chess.GlobalBoard = b
 
 	for _, square := range b.Squares {
-		if square.CurrentPiece != nil {
+		if square.CurrentPiece != nil && square.CurrentPiece.GetPiece().Type==chess.PieceTypePawn {
 			for _, m := range square.CurrentPiece.ValidMoves().BestMoves{
 				fmt.Println(m.Name())
 			}

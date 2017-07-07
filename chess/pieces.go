@@ -53,23 +53,3 @@ type Piece struct {
 	CurrentPosition *Square
 }
 
-type Pawn struct {
-	*Piece
-}
-
-func NewPawn(currentPosition *Square, color int) *Pawn {
-	return &Pawn{&Piece{
-		Type:  PieceTypePawn,
-		Color: color,
-		CurrentPosition:currentPosition,
-	},
-	}
-}
-func (p *Pawn) ValidMoves() *Moves {
-	var moves *Moves
-	return moves
-}
-func (p *Pawn) GetPiece() *Piece {
-	return p.Piece
-}
-

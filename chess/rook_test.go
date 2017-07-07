@@ -3,6 +3,7 @@ package chess
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
+	"fmt"
 )
 
 func TestRook_ValidMoves_MiddleBoard(t *testing.T) {
@@ -15,6 +16,7 @@ func TestRook_ValidMoves_MiddleBoard(t *testing.T) {
 	for _, foundMove := range bestMoves {
 		assert.Contains(t, validMoves, foundMove.Name())
 	}
+	assert.NotEqual(t, bestMoves[0].Name(), bestMoves[1].Name(), fmt.Sprintln(bestMoves[0].Name(), bestMoves[1].Name()))
 }
 
 func TestRook_ValidMoves_CornerBoard(t *testing.T) {
@@ -27,4 +29,5 @@ func TestRook_ValidMoves_CornerBoard(t *testing.T) {
 	for _, foundMove := range bestMoves {
 		assert.Contains(t, validMoves, foundMove.Name())
 	}
+	assert.NotEqual(t, bestMoves[0].Name(), bestMoves[1].Name(), fmt.Sprintln(bestMoves[0].Name(), bestMoves[1].Name()))
 }
