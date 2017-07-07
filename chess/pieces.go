@@ -5,6 +5,11 @@ const (
 )
 
 const (
+	White = iota
+	Black
+)
+
+const (
 	_ = iota
 	PieceTypePawn
 	PieceTypeKnight
@@ -15,18 +20,18 @@ const (
 )
 const (
 	_ = iota
-	WhitePawn = PieceTypePawn
-	WhiteKnight = PieceTypeKnight
-	WhiteBishop = PieceTypeBishop
-	WhiteRook = PieceTypeRook
-	WhiteQueen = PieceTypeQueen
-	WhiteKing = PieceTypeKing
-	BlackPawn = PieceTypePawn
-	BlackKnight = PieceTypeKnight
-	BlackBishop = PieceTypeBishop
-	BlackRook = PieceTypeRook
-	BlackQueen = PieceTypeQueen
-	BlackKing = PieceTypeKing
+	WhitePawn
+	WhiteKnight
+	WhiteBishop
+	WhiteRook
+	WhiteQueen
+	WhiteKing
+	BlackPawn
+	BlackKnight
+	BlackBishop
+	BlackRook
+	BlackQueen
+	BlackKing
 )
 
 func ValidPieces() []int {
@@ -35,3 +40,36 @@ func ValidPieces() []int {
 		BlackPawn, BlackKing, BlackQueen, BlackBishop, BlackKnight, BlackRook,
 	}
 }
+
+type ChessPiece interface {
+	ValidMoves() *Moves
+	GetPiece() *Piece
+}
+
+type Piece struct {
+	Type            int
+	Color           int
+	Name            string
+	CurrentPosition *Square
+}
+
+type Pawn struct {
+	*Piece
+}
+
+func NewPawn(currentPosition *Square, color int) *Pawn {
+	return &Pawn{&Piece{
+		Type:  PieceTypePawn,
+		Color: color,
+		CurrentPosition:currentPosition,
+	},
+	}
+}
+func (p *Pawn) ValidMoves() *Moves {
+	var moves *Moves
+	return moves
+}
+func (p *Pawn) GetPiece() *Piece {
+	return p.Piece
+}
+
