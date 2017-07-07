@@ -6,12 +6,13 @@ type Rook struct {
 
 func NewRook(currentPosition *Square, color int) *Rook {
 	return &Rook{&Piece{
-		Type:  PieceTypeRook,
-		Color: color,
-		CurrentPosition:currentPosition,
+		Type:            PieceTypeRook,
+		Color:           color,
+		CurrentPosition: currentPosition,
 	},
 	}
 }
+
 func (r *Rook) ValidMoves() *Moves {
 	var moves = new(Moves)
 	var m = Move{
@@ -37,7 +38,7 @@ func (r *Rook) ValidMoves() *Moves {
 
 	return moves
 }
+
 func (r *Rook) GetPiece() *Piece {
 	return r.Piece
 }
-
