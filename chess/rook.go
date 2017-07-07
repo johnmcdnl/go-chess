@@ -18,7 +18,7 @@ func (r *Rook) ValidMoves() *Moves {
 	var m = Move{
 		From: r.CurrentPosition,
 	}
-	//vertical
+
 	currentFile := r.GetPiece().CurrentPosition.FileLetter
 	for i := 1; i <= 8; i++ {
 		if i != currentFile {
@@ -27,7 +27,6 @@ func (r *Rook) ValidMoves() *Moves {
 		}
 	}
 
-	//vertical
 	currentRank := r.GetPiece().CurrentPosition.RankNumber
 	for i := 1; i <= 8; i++ {
 		if i != currentRank {
