@@ -3,6 +3,7 @@ package chess
 type Rook struct {
 	*Piece
 }
+
 func NewRook(currentPosition *Square, color int) *Rook {
 	return &Rook{&Piece{
 		Type:  PieceTypeRook,
