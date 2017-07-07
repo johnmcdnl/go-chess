@@ -12,13 +12,13 @@ func NewKnight(currentPosition *Square, color int) *Knight {
 	},
 	}
 }
-func (b *Knight) ValidMoves() *Moves {
+func (k *Knight) ValidMoves() *Moves {
 	var moves = new(Moves)
 	var m = Move{
-		From: b.CurrentPosition,
+		From: k.CurrentPosition,
 	}
-	cFile := b.CurrentPosition.FileLetter
-	cRank := b.CurrentPosition.RankNumber
+	cFile := k.CurrentPosition.FileLetter
+	cRank := k.CurrentPosition.RankNumber
 
 	//RankUp2FileUp1
 	tFile := cFile + 1

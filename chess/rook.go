@@ -14,16 +14,14 @@ func NewRook(currentPosition *Square, color int) *Rook {
 }
 func (r *Rook) ValidMoves() *Moves {
 	var moves = new(Moves)
-
+	var m = Move{
+		From: r.CurrentPosition,
+	}
 	//vertical
 	currentFile := r.GetPiece().CurrentPosition.FileLetter
 	for i := 1; i <= 8; i++ {
 		if i != currentFile {
-			s := GlobalBoard.GetSquare(i, r.CurrentPosition.RankNumber)
-			var m = Move{
-				From:r.CurrentPosition,
-				To: s,
-			}
+			m.To = GlobalBoard.GetSquare(i, r.CurrentPosition.RankNumber)
 			moves.BestMoves = append(moves.BestMoves, &m)
 		}
 	}
@@ -32,11 +30,7 @@ func (r *Rook) ValidMoves() *Moves {
 	currentRank := r.GetPiece().CurrentPosition.RankNumber
 	for i := 1; i <= 8; i++ {
 		if i != currentRank {
-			s := GlobalBoard.GetSquare(r.CurrentPosition.FileLetter, i)
-			var m = Move{
-				From:r.CurrentPosition,
-				To: s,
-			}
+			m.To = GlobalBoard.GetSquare(r.CurrentPosition.FileLetter, i)
 			moves.BestMoves = append(moves.BestMoves, &m)
 		}
 	}
