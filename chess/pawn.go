@@ -13,7 +13,7 @@ func NewPawn(s *Square, c Color) *Pawn {
 }
 
 func (p *Pawn) ValidMoves(b *Board) []*Move {
-	switch p.Color{
+	switch p.Color {
 	default:
 		return []*Move{}
 	case White:
@@ -23,21 +23,21 @@ func (p *Pawn) ValidMoves(b *Board) []*Move {
 	}
 }
 
-func (p *Pawn)whiteMoves(b *Board) []*Move {
+func (p *Pawn) whiteMoves(b *Board) []*Move {
 	var moves []*Move
 
 	pos := p.Position
 	currentFile := pos.File
 	currentRank := pos.Rank
 
-	if currentRank + 1 < 8 {
-		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank + 1)); err == nil {
+	if currentRank+1 < 8 {
+		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank+1)); err == nil {
 			moves = append(moves, m)
 		}
 	}
 
 	if currentRank == 2 {
-		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank + 2)); err == nil {
+		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank+2)); err == nil {
 			moves = append(moves, m)
 		}
 	}
@@ -45,21 +45,21 @@ func (p *Pawn)whiteMoves(b *Board) []*Move {
 	return moves
 }
 
-func (p *Pawn)blackMoves(b *Board) []*Move {
+func (p *Pawn) blackMoves(b *Board) []*Move {
 	var moves []*Move
 
 	pos := p.Position
 	currentFile := pos.File
 	currentRank := pos.Rank
 
-	if currentRank - 1 > 0 {
-		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank - 1)); err == nil {
+	if currentRank-1 > 0 {
+		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank-1)); err == nil {
 			moves = append(moves, m)
 		}
 	}
 
 	if currentRank == 7 {
-		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank - 2)); err == nil {
+		if m, err := NewMove(pos, b.GetSquare(currentFile, currentRank-2)); err == nil {
 			moves = append(moves, m)
 		}
 	}
