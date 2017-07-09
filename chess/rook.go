@@ -20,9 +20,9 @@ func (r *Rook) GetCode() int {
 	return r.Code
 }
 
-func (r *Rook)GetColor() Color {
+func (r *Rook) GetColor() Color {
 	return r.Color
 }
-func (r *Rook)CurrentPosition() *Square {
+func (r *Rook) CurrentPosition() *Square {
 	return r.Position
 }

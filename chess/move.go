@@ -40,17 +40,17 @@ func NewMove(origin, destination *Square) (*Move, error) {
 	return &m, nil
 }
 
-func (m *Move)isValid() (error) {
+func (m *Move) isValid() error {
 
 	if m.destination.ChessPiece == nil {
 		return nil
 	}
 
-	if m.origin.ChessPiece != nil &&  m.origin.ChessPiece.GetColor() == m.destination.ChessPiece.GetColor() {
+	if m.origin.ChessPiece != nil && m.origin.ChessPiece.GetColor() == m.destination.ChessPiece.GetColor() {
 		return fmt.Errorf("Cannot capture your own color piece %s", fmt.Sprint(m.origin.ChessPiece, m.destination.ChessPiece.CurrentPosition().Name))
 	}
 
-	if m.origin.ChessPiece != nil &&  m.origin.ChessPiece.GetCode() == KingPiece {
+	if m.origin.ChessPiece != nil && m.origin.ChessPiece.GetCode() == KingPiece {
 		return fmt.Errorf("Cannot capture KING %s", fmt.Sprint(m.origin.ChessPiece, m.destination.ChessPiece.CurrentPosition().Name))
 	}
 

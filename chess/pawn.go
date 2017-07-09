@@ -20,10 +20,10 @@ func (p *Pawn) GetCode() int {
 	return p.Code
 }
 
-func (p *Pawn)GetColor() Color {
+func (p *Pawn) GetColor() Color {
 	return p.Color
 }
 
-func (p *Pawn)CurrentPosition()*Square{
+func (p *Pawn) CurrentPosition() *Square {
 	return p.Position
 }

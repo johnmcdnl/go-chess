@@ -20,10 +20,10 @@ func (bishop *Bishop) GetCode() int {
 	return bishop.Code
 }
 
-func (bishop *Bishop)GetColor() Color {
+func (bishop *Bishop) GetColor() Color {
 	return bishop.Color
 }
 
-func (bishop *Bishop)CurrentPosition()*Square{
+func (bishop *Bishop) CurrentPosition() *Square {
 	return bishop.Position
 }
