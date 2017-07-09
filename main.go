@@ -17,10 +17,9 @@ func main() {
 	fmt.Println()
 	for i, s := range *b.Squares {
 		if s.ChessPiece != nil {
-			fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece))
-			for i , move :=range s.ChessPiece.ValidMoves(b){
+			for j , move :=range s.ChessPiece.ValidMoves(b){
 				if move!=nil{
-					fmt.Println(i, move.Name())
+					fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece), j, move.Name(), move.IsCaptureMove)
 				}
 
 			}

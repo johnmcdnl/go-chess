@@ -20,11 +20,11 @@ func NewBoard() *Board {
 
 func (b *Board) setStartingPosition() {
 	for _, s := range *b.Squares {
-		if s.Rank == 2 {
+		if s.Rank == 7 {
 			cp := NewPawn(s, White)
 			s.ChessPiece = cp
 		}
-		if s.Rank == 7 {
+		if s.Rank == 2 {
 			cp := NewPawn(s, Black)
 			s.ChessPiece = cp
 		}

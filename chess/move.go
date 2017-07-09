@@ -3,9 +3,10 @@ package chess
 import "fmt"
 
 type Move struct {
-	origin      *Square
-	destination *Square
-	name        string
+	origin        *Square
+	destination   *Square
+	IsCaptureMove bool
+	name          string
 }
 
 func NewMove(origin, destination *Square) (*Move, error) {
@@ -27,8 +28,11 @@ func NewMove(origin, destination *Square) (*Move, error) {
 	m.destination = destination
 
 	if err := m.isValid(); err != nil {
-		fmt.Println(err)
 		return nil, err
+	}
+
+	if destination.ChessPiece != nil && origin.ChessPiece.GetColor() != destination.ChessPiece.GetColor() && destination.ChessPiece.GetCode() != KingPiece {
+		m.IsCaptureMove = true
 	}
 
 	m.generateName()
@@ -44,6 +48,10 @@ func (m *Move)isValid() (error) {
 
 	if m.origin.ChessPiece != nil &&  m.origin.ChessPiece.GetColor() == m.destination.ChessPiece.GetColor() {
 		return fmt.Errorf("Cannot capture your own color piece %s", fmt.Sprint(m.origin.ChessPiece, m.destination.ChessPiece.CurrentPosition().Name))
+	}
+
+	if m.origin.ChessPiece != nil &&  m.origin.ChessPiece.GetCode() == KingPiece {
+		return fmt.Errorf("Cannot capture KING %s", fmt.Sprint(m.origin.ChessPiece, m.destination.ChessPiece.CurrentPosition().Name))
 	}
 
 	return nil
