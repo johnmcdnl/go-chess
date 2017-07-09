@@ -1,79 +1,29 @@
 package chess
 
-type Bishop struct {
-	*Piece
+type Bishop Piece
+
+func NewBishop(s *Square, c Color) *Bishop {
+	var b Bishop
+	b.Name = "bishop"
+	b.Code = BishopPiece
+	b.Position = s
+	b.Color = c
+
+	return &b
 }
 
-func NewBishop(currentPosition *Square, color int) *Bishop {
-	return &Bishop{&Piece{
-		Type:            PieceTypeBishop,
-		Color:           color,
-		CurrentPosition: currentPosition,
-	},
-	}
+func (bishop *Bishop) ValidMoves(board *Board) []*Move {
+	var arr []*Move
+	return arr
 }
-func (b *Bishop) ValidMoves() *Moves {
-	var moves = new(Moves)
-	var m = Move{
-		From: b.CurrentPosition,
-	}
-	//left up      file down, rank up
-	for x := 1; x <= 8; x++ {
-		cFile := b.CurrentPosition.FileLetter
-		cRank := b.CurrentPosition.RankNumber
-
-		tFile := cFile - x
-		tRank := cRank + x
-
-		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, m)
-		}
-	}
-	//right up      file up, rank up
-	for x := 1; x <= 8; x++ {
-		cFile := b.CurrentPosition.FileLetter
-		cRank := b.CurrentPosition.RankNumber
-
-		tFile := cFile + x
-		tRank := cRank + x
-
-		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, m)
-		}
-	}
-
-	//left down      file down, rank down
-	for x := 1; x <= 8; x++ {
-		cFile := b.CurrentPosition.FileLetter
-		cRank := b.CurrentPosition.RankNumber
-
-		tFile := cFile - x
-		tRank := cRank - x
-
-		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, m)
-		}
-	}
-
-	//right down      file up, rank down
-	for x := 1; x <= 8; x++ {
-		cFile := b.CurrentPosition.FileLetter
-		cRank := b.CurrentPosition.RankNumber
-
-		tFile := cFile + x
-		tRank := cRank - x
-
-		if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-			m.To = GlobalBoard.GetSquare(tFile, tRank)
-			moves.BestMoves = append(moves.BestMoves, m)
-		}
-	}
-
-	return moves
+func (bishop *Bishop) GetCode() int {
+	return bishop.Code
 }
-func (r *Bishop) GetPiece() *Piece {
-	return r.Piece
+
+func (bishop *Bishop)GetColor() Color {
+	return bishop.Color
+}
+
+func (bishop *Bishop)CurrentPosition()*Square{
+	return bishop.Position
 }

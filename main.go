@@ -1,21 +1,30 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/johnmcdnl/go-chess/chess"
+	"fmt"
 )
 
 func main() {
-	fmt.Println("Welcome to go-chess")
-	b := chess.NewBoard()
-	chess.GlobalBoard = b
 
-	for _, square := range b.Squares {
-		if square.CurrentPiece != nil && square.CurrentPiece.GetPiece().Type==chess.PieceTypePawn {
-			for _, m := range square.CurrentPiece.ValidMoves().BestMoves{
-				fmt.Println(m.Name())
+	b := chess.NewBoard()
+	//for i, s := range *b.Squares {
+	//	if s != nil && s.Piece != nil {
+	//		//fmt.Println(i, s.Name, s.Piece.Name)
+	//	}
+	//}
+	fmt.Println()
+	fmt.Println()
+	for i, s := range *b.Squares {
+		if s.ChessPiece != nil {
+			for j , move :=range s.ChessPiece.ValidMoves(b){
+				if move!=nil{
+					fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece), j, move.Name(), move.IsCaptureMove)
+				}
+
 			}
 		}
 	}
+
+
 }

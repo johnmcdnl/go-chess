@@ -1,122 +1,80 @@
 package chess
 
-import (
-	"fmt"
-)
-
-var GlobalBoard *Board
-
 type Board struct {
-	Squares []*Square
-}
-
-type Square struct {
-	ID           int
-	RankNumber   int
-	FileLetter   int
-	Name         string
-	CurrentPiece ChessPiece
+	Squares *[]*Square
 }
 
 func NewBoard() *Board {
 	var b Board
-	b.setupSquares()
-	b.setInitialBoard()
-	GlobalBoard = &b
+	var squares []*Square
+	for rank := 1; rank <= 8; rank++ {
+		for file := 1; file <= 8; file++ {
+			s := NewSquare(file, rank)
+			squares = append(squares, s)
+		}
+	}
+	b.Squares = &squares
+	b.setStartingPosition()
 	return &b
 }
 
-func (b *Board) setupSquares() {
-	var squares []*Square
-
-	for rank := 1; rank <= 8; rank++ {
-		for file := 1; file <= 8; file++ {
-			var s Square
-			s.FileLetter = file
-			s.RankNumber = rank
-			s.ID = (((rank * 8) + file ) - 8)
-			s.Name = fmt.Sprint(fileNumToLetter(s.FileLetter), s.RankNumber)
-			squares = append(squares, &s)
+func (b *Board) setStartingPosition() {
+	for _, s := range *b.Squares {
+		if s.Rank == 7 {
+			cp := NewPawn(s, White)
+			s.ChessPiece = cp
 		}
-	}
-
-	b.Squares = squares
-}
-
-func fileNumToLetter(i int) string {
-
-	switch i {
-	default:
-		return ""
-	case 1:
-		return "a"
-	case 2:
-		return "b"
-	case 3:
-		return "c"
-	case 4:
-		return "d"
-	case 5:
-		return "e"
-	case 6:
-		return "f"
-	case 7:
-		return "g"
-	case 8:
-		return "h"
-	}
-}
-
-func (b *Board) setInitialBoard() {
-	for _, square := range b.Squares {
-		if square.RankNumber == 2 {
-			square.CurrentPiece = NewPawn(square, White)
-		}
-		if square.RankNumber == 7 {
-			square.CurrentPiece = NewPawn(square, Black)
+		if s.Rank == 2 {
+			cp := NewPawn(s, Black)
+			s.ChessPiece = cp
 		}
 
-		if square.RankNumber == 1 {
-			if square.FileLetter == 1 || square.FileLetter == 8 {
-				square.CurrentPiece = NewRook(square, White)
-			}
-			//if square.FileLetter == 1 || square.FileLetter == 7 {
-			//	square.CurrentPiece = GetPiece(WhiteKnight)
-			//}
-			if square.FileLetter == 3    ||square.FileLetter == 6 {
-				square.CurrentPiece = NewBishop(square, White)
-			}
-			//if square.FileLetter == 1 {
-			//	square.CurrentPiece = GetPiece(WhiteQueen)
-			//}
-			//if square.FileLetter == 1 {
-			//	square.CurrentPiece = GetPiece(WhiteKing)
-			//}
+		if s.Name == "b1" || s.Name == "g1" {
+			cp := NewKnight(s, White)
+			s.ChessPiece = cp
+		}
+		if s.Name == "b8" || s.Name == "g8" {
+			cp := NewKnight(s, Black)
+			s.ChessPiece = cp
 		}
 
-		if square.RankNumber == 8 {
-			if square.FileLetter == 1 || square.FileLetter == 8 {
-				square.CurrentPiece = NewRook(square, Black)
-			}
-			//if square.FileLetter == 2 || square.FileLetter == 7 {
-			//	square.CurrentPiece = GetPiece(BlackKnight)
-			//}
-			if square.FileLetter == 3    ||square.FileLetter == 6 {
-				square.CurrentPiece = NewBishop(square, Black)
-			}
-			//if square.FileLetter == 4 {
-			//	square.CurrentPiece = GetPiece(BlackQueen)
-			//}
-			//if square.FileLetter == 5 {
-			//	square.CurrentPiece = GetPiece(BlackKing)
-			//}
+		if s.Name == "a1" || s.Name == "h1" {
+			cp := NewRook(s, White)
+			s.ChessPiece = cp
 		}
+		if s.Name == "a8" || s.Name == "h8" {
+			cp := NewRook(s, Black)
+			s.ChessPiece = cp
+		}
+
+		if s.Name == "c1" || s.Name == "f1" {
+			cp := NewBishop(s, White)
+			s.ChessPiece = cp
+		}
+		if s.Name == "c8" || s.Name == "f8" {
+			cp := NewBishop(s, Black)
+			s.ChessPiece = cp
+		}
+
 	}
 }
 
-func (b *Board)GetSquare(file int, rank int) *Square {
-	for _, s := range b.Squares {
-		if s.FileLetter == file && s.RankNumber == rank {
+func (b *Board) SetFEN(fen FEN) {
+	if !fen.IsValid() {
+		return
+	}
+}
+
+func (b *Board) GetFen() FEN {
+	return StartingPositionFEN
+}
+
+func (b *Board) GetSquare(file, rank int) *Square {
+	if file < 1 || file > 8 || rank < 1 || rank > 8 {
+		return nil
+	}
+	for _, s := range *b.Squares {
+		if s.File == file && s.Rank == rank {
 			return s
 		}
 	}

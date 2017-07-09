@@ -1,14 +1,14 @@
 package chess
 
-import (
-	"testing"
-)
+import "testing"
 
 func BenchmarkKnight_ValidMoves(b *testing.B) {
-	e5 := GlobalBoard.GetSquare(5, 5)
-	e5.CurrentPiece = NewKnight(e5, White)
+	var board = NewBoard()
+	s := NewSquare(4, 4)
+	k := NewKnight(s, White)
 
-	for i:=0; i<b.N;i++{
-		e5.CurrentPiece.ValidMoves()
+	for i := 0; i <= b.N; i++ {
+		k.ValidMoves(board)
 	}
+
 }

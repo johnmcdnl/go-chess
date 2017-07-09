@@ -1,91 +1,60 @@
 package chess
 
-type Knight struct {
-	*Piece
+type Knight Piece
+
+func NewKnight(s *Square, c Color) *Knight {
+	var k Knight
+	k.Name = "knight"
+	k.Code = KnightPiece
+	k.Color = c
+	k.Position = s
+	return &k
 }
 
-func NewKnight(currentPosition *Square, color int) *Knight {
-	return &Knight{&Piece{
-		Type:            PieceTypeKnight,
-		Color:           color,
-		CurrentPosition: currentPosition,
-	},
-	}
-}
-func (k *Knight) ValidMoves() *Moves {
-	var moves = new(Moves)
-	var m = Move{
-		From: k.CurrentPosition,
-	}
-	cFile := k.CurrentPosition.FileLetter
-	cRank := k.CurrentPosition.RankNumber
+func (k *Knight) ValidMoves(b *Board) []*Move {
+	var moves []*Move
 
-	//RankUp2FileUp1
-	tFile := cFile + 1
-	tRank := cRank + 2
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	pos := k.Position
+	currentFile := pos.File
+	currentRank := pos.Rank
+
+	if m, err := NewMove(pos, b.GetSquare(currentFile + 2, currentRank + 1)); err == nil {
+		moves = append(moves, m)
 	}
 
-	//RankUp2FileDown1
-	tFile = cFile - 1
-	tRank = cRank + 2
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile + 2, currentRank - 1)); err == nil {
+		moves = append(moves, m)
 	}
 
-
-	//RankDown2FileUp1
-	tFile = cFile + 1
-	tRank = cRank -2
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile + 1, currentRank + 2)); err == nil {
+		moves = append(moves, m)
 	}
-	//RankDown2FileUp1
-	tFile = cFile + 1
-	tRank = cRank - 2
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile + 1, currentRank - 2)); err == nil {
+		moves = append(moves, m)
 	}
-
-
-	//FileDown2RankUp1
-	tFile = cFile - 2
-	tRank = cRank + 1
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile - 2, currentRank + 1)); err == nil {
+		moves = append(moves, m)
 	}
-	//FileDown2RankDown1
-	tFile = cFile - 2
-	tRank = cRank - 1
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile - 2, currentRank - 1)); err == nil {
+		moves = append(moves, m)
 	}
-
-	//FileUp2RankUp1
-	tFile = cFile +2
-	tRank = cRank +1
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile - 1, currentRank + 2)); err == nil {
+		moves = append(moves, m)
 	}
-	//FileUp2RankDown1
-	tFile = cFile +2
-	tRank = cRank -1
-	if tFile > 0 && tFile <= 8 && tRank > 0 && tRank <= 8 {
-		m.To = GlobalBoard.GetSquare(tFile, tRank)
-		moves.BestMoves = append(moves.BestMoves, m)
+	if m, err := NewMove(pos, b.GetSquare(currentFile - 1, currentRank - 2)); err == nil {
+		moves = append(moves, m)
 	}
-
-
 	return moves
 }
-func (r *Knight) GetPiece() *Piece {
-	return r.Piece
+
+func (k *Knight) GetCode() int {
+	return k.Code
+}
+
+func (k *Knight)GetColor() Color {
+	return k.Color
+}
+
+func (k *Knight)CurrentPosition()*Square{
+	return k.Position
 }
