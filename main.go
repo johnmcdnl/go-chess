@@ -18,7 +18,12 @@ func main() {
 	for i, s := range *b.Squares {
 		if s.ChessPiece != nil {
 			fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece))
-			fmt.Println(s.ChessPiece.ValidMoves(b))
+			for i , move :=range s.ChessPiece.ValidMoves(b){
+				if move!=nil{
+					fmt.Println(i, move.Name())
+				}
+
+			}
 		}
 	}
 

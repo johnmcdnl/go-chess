@@ -18,43 +18,65 @@ func NewBoard() *Board {
 	return &b
 }
 
-func (b *Board)setStartingPosition() {
+func (b *Board) setStartingPosition() {
 	for _, s := range *b.Squares {
+		if s.Rank == 2 {
+			cp := NewPawn(s, White)
+			s.ChessPiece = cp
+		}
+		if s.Rank == 7 {
+			cp := NewPawn(s, Black)
+			s.ChessPiece = cp
+		}
+
 		if s.Name == "b1" || s.Name == "g1" {
-			k := NewKnight(White)
-			s.ChessPiece = k
+			cp := NewKnight(s, White)
+			s.ChessPiece = cp
 		}
 		if s.Name == "b8" || s.Name == "g8" {
-			k := NewKnight(Black)
-			s.ChessPiece = k
+			cp := NewKnight(s, Black)
+			s.ChessPiece = cp
 		}
 
 		if s.Name == "a1" || s.Name == "h1" {
-			k := NewRook(White)
-			s.ChessPiece = k
+			cp := NewRook(s, White)
+			s.ChessPiece = cp
 		}
 		if s.Name == "a8" || s.Name == "h8" {
-			k := NewRook(Black)
-			s.ChessPiece = k
+			cp := NewRook(s, Black)
+			s.ChessPiece = cp
 		}
 
 		if s.Name == "c1" || s.Name == "f1" {
-			k := NewBishop(White)
-			s.ChessPiece = k
+			cp := NewBishop(s, White)
+			s.ChessPiece = cp
 		}
 		if s.Name == "c8" || s.Name == "f8" {
-			k := NewBishop(Black)
-			s.ChessPiece = k
+			cp := NewBishop(s, Black)
+			s.ChessPiece = cp
 		}
+
 	}
 }
 
-func (b *Board)SetFEN(fen FEN) {
+func (b *Board) SetFEN(fen FEN) {
 	if !fen.IsValid() {
 		return
 	}
 }
 
-func (b *Board)GetFen() FEN {
+func (b *Board) GetFen() FEN {
 	return StartingPositionFEN
+}
+
+func (b *Board) GetSquare(file, rank int) *Square {
+	if file < 1 || file > 8 || rank < 1 || rank > 8 {
+		return nil
+	}
+	for _, s := range *b.Squares {
+		if s.File == file && s.Rank == rank {
+			return s
+		}
+	}
+	return nil
 }
