@@ -1,5 +1,17 @@
 package chess
 
+const (
+	_ = iota
+	A
+	B
+	C
+	D
+	E
+	F
+	G
+	H
+)
+
 type Coordinate struct {
 	File int
 	Rank int
