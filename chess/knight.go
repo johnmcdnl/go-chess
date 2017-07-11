@@ -8,6 +8,8 @@ func NewKnight(s *Square, c Color) *Knight {
 	k.Code = KnightPiece
 	k.Color = c
 	k.Position = s
+
+	s.ChessPiece = &k
 	return &k
 }
 

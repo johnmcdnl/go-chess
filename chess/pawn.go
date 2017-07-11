@@ -3,13 +3,15 @@ package chess
 type Pawn Piece
 
 func NewPawn(s *Square, c Color) *Pawn {
-	var b Pawn
-	b.Name = "Pawn"
-	b.Code = PawnPiece
-	b.Position = s
-	b.Color = c
+	var p Pawn
+	p.Name = "Pawn"
+	p.Code = PawnPiece
+	p.Position = s
+	p.Color = c
 
-	return &b
+
+	s.ChessPiece = &p
+	return &p
 }
 
 func (p *Pawn) ValidMoves(b *Board) []*Move {

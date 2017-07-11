@@ -8,6 +8,8 @@ func NewRook(s *Square, c Color) *Rook {
 	r.Color = c
 	r.Position = s
 	r.Code = RookPiece
+
+	s.ChessPiece = &r
 	return &r
 }
 

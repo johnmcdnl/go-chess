@@ -9,6 +9,7 @@ func NewBishop(s *Square, c Color) *Bishop {
 	b.Position = s
 	b.Color = c
 
+	s.ChessPiece = &b
 	return &b
 }
 
