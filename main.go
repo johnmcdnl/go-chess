@@ -16,15 +16,14 @@ func main() {
 	fmt.Println()
 	fmt.Println()
 	for i, s := range *b.Squares {
-		if s.ChessPiece != nil {
-			for j , move :=range s.ChessPiece.ValidMoves(b){
-				if move!=nil{
+		if s.ChessPiece != nil && s.ChessPiece.GetCode() == chess.BishopPiece {
+			for j, move := range s.ChessPiece.ValidMoves(b) {
+				if move != nil {
 					fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece), j, move.Name(), move.IsCaptureMove)
 				}
-
 			}
+			fmt.Println()
 		}
 	}
-
 
 }

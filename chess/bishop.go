@@ -19,7 +19,6 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 	cRank := bishop.Position.Rank
 	cFile := bishop.Position.File
 
-
 	//up left
 	for i := 1; i < 8; i++ {
 		tFile := cFile - i
@@ -27,7 +26,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
 			break
 		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
+		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
 			break
 		}
@@ -41,13 +40,12 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
 			break
 		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
+		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
 			break
 		}
 		moves = append(moves, m)
 	}
-
 
 	//down left
 	for i := 1; i < 8; i++ {
@@ -56,7 +54,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
 			break
 		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
+		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
 			break
 		}
@@ -70,7 +68,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
 			break
 		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
+		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
 			break
 		}

@@ -9,7 +9,6 @@ func NewPawn(s *Square, c Color) *Pawn {
 	p.Position = s
 	p.Color = c
 
-
 	s.ChessPiece = &p
 	return &p
 }
