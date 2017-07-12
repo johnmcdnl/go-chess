@@ -3,6 +3,7 @@ package chess
 import (
 	"reflect"
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewRook(t *testing.T) {
@@ -15,13 +16,18 @@ func TestNewRook(t *testing.T) {
 		args args
 		want *Rook
 	}{
-	// TODO: Add test cases.
+		{"White Rook at A1", args{NewSquare(A, 1), White}, &Rook{Name:"rook", Position:NewSquare(A, 1), Code:RookPiece, Color:White}},
+		{"Black Rook at H1", args{NewSquare(H, 1), Black}, &Rook{Name:"rook", Position:NewSquare(H, 1), Code:RookPiece, Color:Black}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewRook(tt.args.s, tt.args.c); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewRook() = %v, want %v", got, tt.want)
-			}
+			got := NewRook(tt.args.s, tt.args.c)
+			assert.Equal(t, tt.want.Name, got.Name, "Name")
+			assert.Equal(t, tt.want.Code, got.Code, "Code")
+			assert.Equal(t, tt.want.Color, got.Color, "Color")
+			assert.Equal(t, tt.want.Position.File, got.Position.File, "Position.File")
+			assert.Equal(t, tt.want.Position.Rank, got.Position.Rank, "Position.Rank")
+
 		})
 	}
 }
@@ -36,7 +42,7 @@ func TestRook_ValidMoves(t *testing.T) {
 		args args
 		want []*Move
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -53,7 +59,7 @@ func TestRook_GetCode(t *testing.T) {
 		r    *Rook
 		want int
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -70,7 +76,7 @@ func TestRook_GetColor(t *testing.T) {
 		r    *Rook
 		want Color
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -87,7 +93,7 @@ func TestRook_CurrentPosition(t *testing.T) {
 		r    *Rook
 		want *Square
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

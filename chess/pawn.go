@@ -4,7 +4,7 @@ type Pawn Piece
 
 func NewPawn(s *Square, c Color) *Pawn {
 	var p Pawn
-	p.Name = "Pawn"
+	p.Name = "pawn"
 	p.Code = PawnPiece
 	p.Position = s
 	p.Color = c

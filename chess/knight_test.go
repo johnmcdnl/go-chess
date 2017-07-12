@@ -3,6 +3,7 @@ package chess
 import (
 	"reflect"
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewKnight(t *testing.T) {
@@ -15,13 +16,18 @@ func TestNewKnight(t *testing.T) {
 		args args
 		want *Knight
 	}{
-	// TODO: Add test cases.
+		{"White Knight at A1", args{NewSquare(A, 1), White}, &Knight{Name:"knight", Position:NewSquare(A, 1), Code:KnightPiece, Color:White}},
+		{"Black Knight at H1", args{NewSquare(H, 1), Black}, &Knight{Name:"knight", Position:NewSquare(H, 1), Code:KnightPiece, Color:Black}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewKnight(tt.args.s, tt.args.c); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewKnight() = %v, want %v", got, tt.want)
-			}
+			got := NewKnight(tt.args.s, tt.args.c)
+			assert.Equal(t, tt.want.Name, got.Name, "Name")
+			assert.Equal(t, tt.want.Code, got.Code, "Code")
+			assert.Equal(t, tt.want.Color, got.Color, "Color")
+			assert.Equal(t, tt.want.Position.File, got.Position.File, "Position.File")
+			assert.Equal(t, tt.want.Position.Rank, got.Position.Rank, "Position.Rank")
+
 		})
 	}
 }
@@ -42,7 +48,7 @@ func TestKnight_ValidMoves(t *testing.T) {
 		args   args
 		want   []*Move
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -71,7 +77,7 @@ func TestKnight_GetCode(t *testing.T) {
 		fields fields
 		want   int
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -100,7 +106,7 @@ func TestKnight_GetColor(t *testing.T) {
 		fields fields
 		want   Color
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -129,7 +135,7 @@ func TestKnight_CurrentPosition(t *testing.T) {
 		fields fields
 		want   *Square
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
