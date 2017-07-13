@@ -16,3 +16,7 @@ func (p pieceForTestImplemented)GetColor() Color {
 func (p pieceForTestImplemented)PieceType() PieceType {
 	return Queen
 }
+
+func (p pieceForTestImplemented)ValidMoves() []*Move {
+	return []*Move{}
+}

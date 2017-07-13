@@ -14,8 +14,13 @@ const Bishop = PieceType(4)
 const Knight = PieceType(5)
 const Pawn = PieceType(6)
 
+type Move struct {
+
+}
+
 type Piece interface {
 	GetName() string
 	GetColor() Color
 	PieceType() PieceType
+	ValidMoves() []*Move
 }
