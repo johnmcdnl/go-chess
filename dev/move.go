@@ -15,6 +15,7 @@ func NewMove(origin, destination *Square) (*Move, error) {
 	var m Move
 	m.origin = origin
 	m.destination = destination
+	return &m, nil 
 
 }
 
@@ -23,13 +24,13 @@ func (m *Move)Name() string {
 }
 
 func (m *Move)Apply() error {
-	if isValid, err := !m.IsValid(); !isValid {
+	if isValid, err := m.IsValid(); !isValid {
 		return err
 	}
 	if err := m.destination.NewPiece(m.origin.piece); err != nil {
 		return err
 	}
-	m.origin.piece == nil
+	m.origin.piece = nil
 	m.origin.isOccupied = false
 	return nil
 }
@@ -48,7 +49,7 @@ func (m *Move)IsValid() (bool, error) {
 	}
 
 	if !d.IsOccupied() {
-		return true
+		return true, nil
 	}
 
 	if d.IsOccupied() && o.GetPiece().GetColor() == d.GetPiece().GetColor() {
@@ -67,5 +68,5 @@ func (m *Move)IsValid() (bool, error) {
 		return false, errors.New((fmt.Sprintln("Can't capture the king: ", string(js), string(jp))))
 	}
 
-	return true
+	return true, nil
 }
