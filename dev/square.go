@@ -62,6 +62,8 @@ func (s *Square)GetPiece() Piece {
 
 //TODO test me - why did I do this before making pieces :-|
 func (s *Square)NewPiece(p Piece) error {
+
+	//TODO consider deleting this and let 'move.go' handle all moving logic
 	if s.isOccupied && s.piece.GetColor() == p.GetColor() {
 		js, err := json.Marshal(s)
 		fmt.Println(err, string(js))

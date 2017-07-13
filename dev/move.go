@@ -15,7 +15,7 @@ func NewMove(origin, destination *Square) (*Move, error) {
 	var m Move
 	m.origin = origin
 	m.destination = destination
-	return &m, nil 
+	return &m, nil
 
 }
 
