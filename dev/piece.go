@@ -14,9 +14,6 @@ const BishopPiece = PieceType(4)
 const KnightPiece = PieceType(5)
 const PawnPiece = PieceType(6)
 
-type Move struct {
-
-}
 
 type BasePiece struct {
 	name      string

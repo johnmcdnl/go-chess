@@ -22,6 +22,7 @@ type Square struct {
 	File       int
 	Rank       int
 	name       string
+	//TODO just use a nil check on piece vs isOccupied bool - retain method for convenience
 	isOccupied bool
 	piece      Piece
 }
@@ -78,5 +79,6 @@ func (s *Square)NewPiece(p Piece) error {
 	}
 
 	s.piece = p
+	s.isOccupied = true
 	return nil
 }
