@@ -18,6 +18,12 @@ type Move struct {
 
 }
 
+type BasePiece struct {
+	name string
+	color Color
+	pieceType PieceType
+}
+
 type Piece interface {
 	GetName() string
 	GetColor() Color
