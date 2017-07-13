@@ -1,5 +1,7 @@
 package chess
 
+import "fmt"
+
 type Bishop Piece
 
 func NewBishop(s *Square, c Color) *Bishop {
@@ -28,6 +30,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		}
 		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
+			fmt.Println(err, tFile, tRank)
 			break
 		}
 		moves = append(moves, m)
@@ -42,6 +45,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		}
 		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
+			fmt.Println(err, tFile, tRank)
 			break
 		}
 		moves = append(moves, m)
@@ -56,6 +60,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		}
 		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
+			fmt.Println(err, tFile, tRank)
 			break
 		}
 		moves = append(moves, m)
@@ -70,6 +75,7 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		}
 		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank))
 		if err != nil {
+			fmt.Println(err, tFile, tRank)
 			break
 		}
 		moves = append(moves, m)

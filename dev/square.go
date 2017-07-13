@@ -22,13 +22,21 @@ type Square struct {
 	isOccupied bool
 }
 
-func NewSquare(file, rank int) *Square {
+func NewSquare(file, rank int) (*Square, error) {
+
+	if file <= 0 || file > 8 {
+		return nil, fmt.Errorf("Invalid File %d", file)
+	}
+	if rank <= 0 || rank > 8 {
+		return nil, fmt.Errorf("Invalid Rank %d", rank)
+	}
+
 	var s Square
 	s.File = file
 	s.Rank = rank
 	s.name = fmt.Sprint(string('a' - 1 + s.File), s.Rank)
 	s.id = file * 8 + rank - 8 - 1
-	return &s
+	return &s, nil
 }
 
 func (s *Square)GetID() int {
