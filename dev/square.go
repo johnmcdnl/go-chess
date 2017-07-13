@@ -20,6 +20,7 @@ type Square struct {
 	Rank       int
 	name       string
 	isOccupied bool
+	piece      Piece
 }
 
 func NewSquare(file, rank int) (*Square, error) {
@@ -49,5 +50,9 @@ func (s *Square)Name() string {
 
 func (s *Square)IsOccupied() bool {
 	return s.isOccupied
+}
+
+func (s *Square)GetPiece() Piece {
+	return s.piece
 }
 

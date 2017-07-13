@@ -82,7 +82,7 @@ func TestNewSquare(t *testing.T) {
 		{"h7", args{H, 7}, &Square{File: H, Rank: 7, name: "h7", id: 62, isOccupied: false}, false},
 		{"h8", args{H, 8}, &Square{File: H, Rank: 8, name: "h8", id: 63, isOccupied: false}, false},
 
-		{"file too low", args{0, 8}, nil, true },
+		{"file too low", args{0, 8}, nil, true},
 		{"file too high", args{9, 8}, nil, true},
 		{"rank too low", args{H, 0}, nil, true},
 		{"rank too high", args{H, 9}, nil, true},
@@ -122,9 +122,9 @@ func TestSquare_GetID(t *testing.T) {
 		fields fields
 		want   int
 	}{
-		{"valid-id", fields{10, 0, 0, "some-square", true}, 10 },
-		{"large-id", fields{100, 0, 0, "some-square", false}, 100 },
-		{"zero-id", fields{0, 0, 0, "some-square", false}, 0 },
+		{"valid-id", fields{10, 0, 0, "some-square", true}, 10},
+		{"large-id", fields{100, 0, 0, "some-square", false}, 100},
+		{"zero-id", fields{0, 0, 0, "some-square", false}, 0},
 		{"negative-id", fields{-1, 0, 0, "some-square", false}, -1},
 	}
 	for _, tt := range tests {
@@ -156,8 +156,8 @@ func TestSquare_Name(t *testing.T) {
 		fields fields
 		want   string
 	}{
-		{"valid-name", fields{0, 0, 0, "my-valid-name", true}, "my-valid-name" },
-		{"empty-name", fields{0, 0, 0, "", false}, "" },
+		{"valid-name", fields{0, 0, 0, "my-valid-name", true}, "my-valid-name"},
+		{"empty-name", fields{0, 0, 0, "", false}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -188,8 +188,8 @@ func TestSquare_IsOccupied(t *testing.T) {
 		fields fields
 		want   bool
 	}{
-		{"is-occupied", fields{0, 0, 0, "some-square", true}, true },
-		{"is-not-occupied", fields{0, 0, 0, "some-square", false}, false },
+		{"is-occupied", fields{0, 0, 0, "some-square", true}, true},
+		{"is-not-occupied", fields{0, 0, 0, "some-square", false}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -203,6 +203,48 @@ func TestSquare_IsOccupied(t *testing.T) {
 			if got := s.IsOccupied(); got != tt.want {
 				t.Errorf("Square.IsOccupied() = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+func TestSquare_GetPiece(t *testing.T) {
+
+	type fields struct {
+		id         int
+		File       int
+		Rank       int
+		name       string
+		isOccupied bool
+		piece      Piece
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   Piece
+	}{
+		{"is-occupied", fields{0, A, 1, "a1", true, newPieceForTestImplemented()}, newPieceForTestImplemented()},
+		{"is-not-occupied", fields{0, A, 1, "a1", true, nil}, nil},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &Square{
+				id:         tt.fields.id,
+				File:       tt.fields.File,
+				Rank:       tt.fields.Rank,
+				name:       tt.fields.name,
+				isOccupied: tt.fields.isOccupied,
+				piece:      tt.fields.piece,
+			}
+
+			got := s.GetPiece()
+
+			if tt.want == nil {
+				assert.Nil(t, got)
+				return
+			}
+
+			assert.NotNil(t, got)
+			assert.Equal(t, tt.want.GetName(), got.GetName())
 		})
 	}
 }
