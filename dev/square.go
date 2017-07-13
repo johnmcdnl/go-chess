@@ -1,6 +1,9 @@
 package dev
 
-import "fmt"
+import (
+	"fmt"
+	"encoding/json"
+)
 
 const (
 	_ = iota
@@ -56,3 +59,24 @@ func (s *Square)GetPiece() Piece {
 	return s.piece
 }
 
+//TODO test me - why did I do this before making pieces :-|
+func (s *Square)NewPiece(p Piece) error {
+	if s.isOccupied && s.piece.GetColor() == p.GetColor() {
+		js, err := json.Marshal(s)
+		fmt.Println(err, string(js))
+		jp, err := json.Marshal(p)
+		fmt.Println(err, string(jp))
+		return fmt.Errorf("Cannot capture your own piece: %s  %s:", string(js), string(jp))
+	}
+
+	if s.isOccupied && s.piece.GetColor() != p.GetColor() && s.piece.PieceType() == King {
+		js, err := json.Marshal(s)
+		fmt.Println(err, string(js))
+		jp, err := json.Marshal(p)
+		fmt.Println(err, string(jp))
+		return fmt.Errorf("Cannot capture the King: %s  %s:", string(js), string(jp))
+	}
+
+	s.piece = p
+	return nil
+}

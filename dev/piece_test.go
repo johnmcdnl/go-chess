@@ -8,3 +8,11 @@ func newPieceForTestImplemented() Piece {
 func (p pieceForTestImplemented)GetName() string {
 	return "pieceImplemented"
 }
+
+func (p pieceForTestImplemented)GetColor() Color {
+	return White
+}
+
+func (p pieceForTestImplemented)PieceType() PieceType {
+	return Queen
+}
