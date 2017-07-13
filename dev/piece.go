@@ -7,20 +7,20 @@ const Black = Color(1)
 
 type PieceType int
 
-const King = PieceType(1)
-const Queen = PieceType(2)
-const Rook = PieceType(3)
-const Bishop = PieceType(4)
-const Knight = PieceType(5)
-const Pawn = PieceType(6)
+const KingPiece = PieceType(1)
+const QueenPiece = PieceType(2)
+const RookPiece = PieceType(3)
+const BishopPiece = PieceType(4)
+const KnightPiece = PieceType(5)
+const PawnPiece = PieceType(6)
 
 type Move struct {
 
 }
 
 type BasePiece struct {
-	name string
-	color Color
+	name      string
+	color     Color
 	pieceType PieceType
 }
 

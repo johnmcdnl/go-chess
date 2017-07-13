@@ -69,7 +69,7 @@ func (s *Square)NewPiece(p Piece) error {
 		return fmt.Errorf("Cannot capture your own piece: %s  %s:", string(js), string(jp))
 	}
 
-	if s.isOccupied && s.piece.GetColor() != p.GetColor() && s.piece.PieceType() == King {
+	if s.isOccupied && s.piece.GetColor() != p.GetColor() && s.piece.PieceType() == KingPiece {
 		js, err := json.Marshal(s)
 		fmt.Println(err, string(js))
 		jp, err := json.Marshal(p)
