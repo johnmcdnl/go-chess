@@ -1,26 +1,28 @@
 package main
 
 import (
-	"github.com/johnmcdnl/go-chess/chess"
 	"fmt"
+	"github.com/johnmcdnl/go-chess/chess"
 )
 
 func main() {
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
+	b, err := chess.NewBoard()
+	fmt.Println(err)
 
-	b := chess.NewBoard()
-	//for i, s := range *b.Squares {
-	//	if s != nil && s.Piece != nil {
-	//		//fmt.Println(i, s.Name, s.Piece.Name)
-	//	}
-	//}
+	for i, s := range b.Squares {
+		fmt.Println(i, s.File, s.Rank, s.CurrentPiece)
+	}
 	fmt.Println()
 	fmt.Println()
-	for i, s := range *b.Squares {
-		if s.ChessPiece != nil && s.ChessPiece.GetCode() == chess.BishopPiece {
-			for j, move := range s.ChessPiece.ValidMoves(b) {
-				if move != nil {
-					fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece), j, move.Name(), move.IsCaptureMove)
-				}
+	fmt.Println()
+	for _, s := range b.Squares {
+		if s.CurrentPiece != nil {
+			fmt.Println()
+			for _, m:=range s.CurrentPiece.ValidMoves(b){
+				m.Printer()
 			}
 			fmt.Println()
 		}

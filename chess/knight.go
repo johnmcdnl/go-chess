@@ -1,62 +1,54 @@
 package chess
 
-type Knight Piece
+import (
+	"github.com/satori/go.uuid"
+)
 
-func NewKnight(s *Square, c Color) *Knight {
+type Knight struct {
+	Basic
+}
+
+func NewKnight(s *Square, c Color) (*Knight, error) {
 	var k Knight
+	k.ID = uuid.NewV4().String()
 	k.Name = "knight"
-	k.Code = KnightPiece
 	k.Color = c
 	k.Position = s
-
-	s.ChessPiece = &k
-	return &k
+	return &k, nil
 }
 
-func (k *Knight) ValidMoves(b *Board) []*Move {
+func (k *Knight)CurrentPosition() *Square {
+	return k.Position
+}
+
+func (k *Knight)ValidMoves(b *Board) []*Move {
+
 	var moves []*Move
 
-	pos := k.Position
-	currentFile := pos.File
-	currentRank := pos.Rank
-
-	if m, err := NewMove(pos, b.GetSquare(currentFile+2, currentRank+1)); err == nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 2, k.CurrentPosition().Rank + 1)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 2, k.CurrentPosition().Rank - 1)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 1, k.CurrentPosition().Rank + 2)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 1, k.CurrentPosition().Rank - 2)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 1, k.CurrentPosition().Rank + 2)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 1, k.CurrentPosition().Rank - 2)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 2, k.CurrentPosition().Rank + 1)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 2, k.CurrentPosition().Rank - 1)); m != nil {
 		moves = append(moves, m)
 	}
 
-	if m, err := NewMove(pos, b.GetSquare(currentFile+2, currentRank-1)); err == nil {
-		moves = append(moves, m)
-	}
-
-	if m, err := NewMove(pos, b.GetSquare(currentFile+1, currentRank+2)); err == nil {
-		moves = append(moves, m)
-	}
-	if m, err := NewMove(pos, b.GetSquare(currentFile+1, currentRank-2)); err == nil {
-		moves = append(moves, m)
-	}
-	if m, err := NewMove(pos, b.GetSquare(currentFile-2, currentRank+1)); err == nil {
-		moves = append(moves, m)
-	}
-	if m, err := NewMove(pos, b.GetSquare(currentFile-2, currentRank-1)); err == nil {
-		moves = append(moves, m)
-	}
-	if m, err := NewMove(pos, b.GetSquare(currentFile-1, currentRank+2)); err == nil {
-		moves = append(moves, m)
-	}
-	if m, err := NewMove(pos, b.GetSquare(currentFile-1, currentRank-2)); err == nil {
-		moves = append(moves, m)
-	}
 	return moves
-}
-
-func (k *Knight) GetCode() int {
-	return k.Code
-}
-
-func (k *Knight) GetColor() Color {
-	return k.Color
-}
-
-func (k *Knight) CurrentPosition() *Square {
-	return k.Position
 }

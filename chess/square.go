@@ -1,17 +1,19 @@
 package chess
 
-import "fmt"
 
 type Square struct {
-	Name string
-	*Coordinate
-	ChessPiece ChessPiece
+	File         int
+	Rank         int
+	CurrentPiece Piece
 }
 
-func NewSquare(file int, rank int) *Square {
+func NewSquare(file, rank int) (*Square, error) {
 	var s Square
-	s.Coordinate = NewCoordinate(file, rank)
-	s.Name = fmt.Sprint(string('a'-1+file), rank)
+	s.File = file
+	s.Rank = rank
+	return &s, nil
+}
 
-	return &s
+func (s *Square)SetPiece(p Piece) {
+	s.CurrentPiece=p
 }
