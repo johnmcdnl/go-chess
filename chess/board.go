@@ -41,13 +41,14 @@ func (b *Board) LoadFromFEN(f FEN) error {
 
 	for _, s := range b.Squares {
 		//White
-		if (s.File == 2 && s.Rank == 1) || (s.File == 7 && s.Rank == 1) {
+		if (s.File == B && s.Rank == 1) || (s.File == G && s.Rank == 1) {
 			k, _ := NewKnight(s, White)
 			s.SetPiece(k)
 		}
 
+
 		//Black
-		if (s.File == 2 && s.Rank == 8) || (s.File == 7 && s.Rank == 8) {
+		if (s.File == B && s.Rank == 8) || (s.File == G && s.Rank == 8) {
 			k, _ := NewKnight(s, Black)
 			s.SetPiece(k)
 		}

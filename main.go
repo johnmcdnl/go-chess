@@ -22,7 +22,7 @@ func main() {
 		if s.CurrentPiece != nil {
 			fmt.Println()
 			for _, m:=range s.CurrentPiece.ValidMoves(b){
-				m.Printer()
+				fmt.Println(m.Printer())
 			}
 			fmt.Println()
 		}
