@@ -21,7 +21,7 @@ func NewBoard() (*Board, error) {
 	return &b, nil
 }
 
-func (b *Board)build(files, ranks int) error {
+func (b *Board) build(files, ranks int) error {
 	for rank := 1; rank <= ranks; rank++ {
 		for file := 1; file <= files; file++ {
 			s, err := NewSquare(file, rank)
@@ -34,7 +34,7 @@ func (b *Board)build(files, ranks int) error {
 	return nil
 }
 
-func (b *Board)LoadFromFEN(f FEN) error {
+func (b *Board) LoadFromFEN(f FEN) error {
 	if !f.IsValid() {
 		return fmt.Errorf("Invalid FEN %s", f)
 	}
@@ -57,7 +57,7 @@ func (b *Board)LoadFromFEN(f FEN) error {
 	return nil
 }
 
-func (b *Board)GetSquare(file, rank int) *Square {
+func (b *Board) GetSquare(file, rank int) *Square {
 	for _, s := range b.Squares {
 		if s.File == file && s.Rank == rank {
 			return s

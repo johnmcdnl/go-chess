@@ -1,6 +1,5 @@
 package chess
 
-
 type Square struct {
 	File         int
 	Rank         int
@@ -14,6 +13,6 @@ func NewSquare(file, rank int) (*Square, error) {
 	return &s, nil
 }
 
-func (s *Square)SetPiece(p Piece) {
-	s.CurrentPiece=p
+func (s *Square) SetPiece(p Piece) {
+	s.CurrentPiece = p
 }

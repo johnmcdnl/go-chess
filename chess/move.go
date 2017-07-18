@@ -8,9 +8,9 @@ type Move struct {
 }
 
 //New returns a Move or and error if the provided squares are invalid
-func NewMove(origin, destination *Square) (*Move) {
+func NewMove(origin, destination *Square) *Move {
 
-	if origin==nil || destination ==nil{
+	if origin == nil || destination == nil {
 		return nil
 	}
 
@@ -20,14 +20,14 @@ func NewMove(origin, destination *Square) (*Move) {
 	return &m
 }
 
-func (m *Move)Printer() {
+func (m *Move) Printer() {
 	fmt.Println("Origin: ", m.Origin.File, m.Origin.Rank, "Destination: ", m.Destination.File, m.Destination.Rank)
 }
 
-func (m *Move)IsValid() bool {
+func (m *Move) IsValid() bool {
 	return true
 }
 
-func (m *Move)Apply() {
+func (m *Move) Apply() {
 
 }
