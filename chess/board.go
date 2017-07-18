@@ -46,10 +46,22 @@ func (b *Board) LoadFromFEN(f FEN) error {
 			s.SetPiece(k)
 		}
 
+		//White
+		if s.File == D && s.Rank == 4  {
+			k, _ := NewKing(s, White)
+			s.SetPiece(k)
+		}
+
 
 		//Black
 		if (s.File == B && s.Rank == 8) || (s.File == G && s.Rank == 8) {
 			k, _ := NewKnight(s, Black)
+			s.SetPiece(k)
+		}
+
+		//White
+		if s.File == E && s.Rank == 8  {
+			k, _ := NewKing(s, Black)
 			s.SetPiece(k)
 		}
 

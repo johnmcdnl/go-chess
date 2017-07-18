@@ -25,7 +25,7 @@ func NewMove(origin, destination *Square) *Move {
 }
 
 func (m *Move) Printer() string {
-	return fmt.Sprint("Origin: ", m.Origin.PrettyPrint(), "Destination: ", m.Destination.PrettyPrint())
+	return fmt.Sprint("Origin: ", m.Origin.PrettyPrint(), " Destination: ", m.Destination.PrettyPrint())
 }
 
 func (m *Move) IsValid() bool {
