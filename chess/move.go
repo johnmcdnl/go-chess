@@ -46,7 +46,7 @@ func (m *Move) IsValid() bool {
 
 	if m.Origin.CurrentPiece.PieceColor() != m.Destination.CurrentPiece.PieceColor() {
 		fmt.Println("func (m *Move) IsValid() bool  Capturing MOVES!!!", m.Printer())
-		return false
+		return true
 	}
 
 	return true
