@@ -40,6 +40,13 @@ func (b *Board) LoadFromFEN(f FEN) error {
 	}
 
 	for _, s := range b.Squares {
+
+		//White
+		if (s.File == A && s.Rank == 1) || (s.File == H && s.Rank == 1) {
+			k, _ := NewRook(s, White)
+			s.SetPiece(k)
+		}
+
 		//White
 		if (s.File == B && s.Rank == 1) || (s.File == G && s.Rank == 1) {
 			k, _ := NewKnight(s, White)
@@ -47,11 +54,19 @@ func (b *Board) LoadFromFEN(f FEN) error {
 		}
 
 		//White
-		if s.File == D && s.Rank == 4  {
+		if s.File == E && s.Rank == 1  {
 			k, _ := NewKing(s, White)
 			s.SetPiece(k)
 		}
 
+
+
+
+		//Black
+		if (s.File == A && s.Rank == 8) || (s.File == H && s.Rank == 8) {
+			k, _ := NewRook(s, Black)
+			s.SetPiece(k)
+		}
 
 		//Black
 		if (s.File == B && s.Rank == 8) || (s.File == G && s.Rank == 8) {
