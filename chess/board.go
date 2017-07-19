@@ -8,6 +8,16 @@ type Board struct {
 	Squares []*Square
 }
 
+func NewEmptyBoard() (*Board, error) {
+	var b Board
+
+	if err := b.build(8, 8); err != nil {
+		return nil, err
+	}
+
+	return &b, nil
+}
+
 func NewBoard() (*Board, error) {
 	var b Board
 
@@ -43,8 +53,8 @@ func (b *Board) LoadFromFEN(f FEN) error {
 
 		//White
 		if (s.File == A && s.Rank == 1) || (s.File == H && s.Rank == 1) {
-			k, _ := NewRook(s, White)
-			s.SetPiece(k)
+			r, _ := NewRook(s, White)
+			s.SetPiece(r)
 		}
 
 		//White
@@ -59,13 +69,18 @@ func (b *Board) LoadFromFEN(f FEN) error {
 			s.SetPiece(k)
 		}
 
+		//DUMMY
+		if s.File == A && s.Rank == 3  {
+			k, _ := NewRook(s, Black)
+			s.SetPiece(k)
+		}
 
 
 
 		//Black
 		if (s.File == A && s.Rank == 8) || (s.File == H && s.Rank == 8) {
-			k, _ := NewRook(s, Black)
-			s.SetPiece(k)
+			r, _ := NewRook(s, Black)
+			s.SetPiece(r)
 		}
 
 		//Black
