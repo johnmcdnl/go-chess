@@ -5,7 +5,6 @@ Feature: Queen
     Given an empty board
 
   Scenario Outline: Piece in a corner of the empty board
-    Given an empty board
     When a "<color>" "<piece>" is placed on the square "<origin>"
     Then the piece has moves available to "<validMoves>"
     Examples:
@@ -15,7 +14,6 @@ Feature: Queen
       | queen | black | B7     | A7 C7 D7 E7 F7 G7 H7 B8 B6 B5 B4 B3 B2 B1 A6 C8 A8 C6 D5 E4 F3 G2 H1 |
 
   Scenario Outline: Piece has valid capture moves
-    Given an empty board
     When a "<oppColor>" "<oppPiece>" is placed on the square "<oppSquare>"
     When a "<color>" "<piece>" is placed on the square "<origin>"
     Then the piece has moves available to "<validMoves>"

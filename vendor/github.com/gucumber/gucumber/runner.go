@@ -3,57 +3,60 @@ package gucumber
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
 
-	"github.com/gucumber/gucumber/gherkin"
 	"github.com/shiena/ansicolor"
+	"github.com/cucumber/gherkin-go"
 )
 
 const (
-	clrWhite  = "0"
-	clrRed    = "31"
-	clrGreen  = "32"
+	clrWhite = "0"
+	clrRed = "31"
+	clrGreen = "32"
 	clrYellow = "33"
-	clrCyan   = "36"
+	clrCyan = "36"
 
-	txtUnmatchInt   = `(\d+)`
+	txtUnmatchInt = `(\d+)`
 	txtUnmatchFloat = `(-?\d+(?:\.\d+)?)`
-	txtUnmatchStr   = `"(.+?)"`
+	txtUnmatchStr = `"(.+?)"`
 )
 
 var (
-	reUnmatchInt   = regexp.MustCompile(txtUnmatchInt)
+	reUnmatchInt = regexp.MustCompile(txtUnmatchInt)
 	reUnmatchFloat = regexp.MustCompile(txtUnmatchFloat)
-	reUnmatchStr   = regexp.MustCompile(`(<|").+?("|>)`)
-	reOutlineVal   = regexp.MustCompile(`<(.+?)>`)
+	reUnmatchStr = regexp.MustCompile(`(<|").+?("|>)`)
+	reOutlineVal = regexp.MustCompile(`<(.+?)>`)
 )
 
 type Runner struct {
 	*Context
-	Features  []*gherkin.Feature
-	Results   []RunnerResult
-	Unmatched []*gherkin.Step
-	FailCount int
-	SkipCount int
+	GherkinDocuments []*gherkin.GherkinDocument
+	Results          []RunnerResult
+	Unmatched        []*gherkin.Step
+	FailCount        int
+	SkipCount        int
 }
 
 type RunnerResult struct {
 	*TestingT
-	*gherkin.Feature
-	*gherkin.Scenario
+	*gherkin.GherkinDocument //TODO might not need this - pickle should have enough context?
+	*gherkin.Pickle
 }
 
 func (c *Context) RunDir(dir string) (*Runner, error) {
-	g, _ := filepath.Glob(filepath.Join(dir, "*.feature"))
-	g2, _ := filepath.Glob(filepath.Join(dir, "**", "*.feature"))
-	g = append(g, g2...)
+	var featureFiles []string
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if strings.HasSuffix(path, ".feature") {
+			featureFiles = append(featureFiles, path)
+		}
+		return nil
+	})
 
-	runner, err := c.RunFiles(g)
+	runner, err := c.RunFiles(featureFiles)
 	if err != nil {
 		panic(err)
 	}
@@ -68,34 +71,29 @@ func (c *Context) RunDir(dir string) (*Runner, error) {
 	return runner, err
 }
 
-func (c *Context) RunFiles(featureFiles []string) (*Runner, error) {
+func parseFile(filename string) (*gherkin.GherkinDocument, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return gherkin.ParseGherkinDocument(f)
+}
+
+func (c *Context) RunFiles(featurePaths []string) (*Runner, error) {
 	r := Runner{
 		Context:   c,
-		Features:  []*gherkin.Feature{},
+		GherkinDocuments:  []*gherkin.GherkinDocument{},
 		Results:   []RunnerResult{},
 		Unmatched: []*gherkin.Step{},
 	}
 
-	for _, file := range featureFiles {
-		fd, err := os.Open(file)
+	for _, filePath := range featurePaths {
+		gd, err := parseFile(filePath)
 		if err != nil {
 			return nil, err
 		}
-		defer fd.Close()
-
-		b, err := ioutil.ReadAll(fd)
-		if err != nil {
-			return nil, err
-		}
-
-		fs, err := gherkin.ParseFilename(string(b), file)
-		if err != nil {
-			return nil, err
-		}
-
-		for _, f := range fs {
-			r.Features = append(r.Features, &f)
-		}
+		r.GherkinDocuments = append(r.GherkinDocuments, &gd)
 	}
 
 	r.run()
@@ -154,18 +152,18 @@ func (c *Runner) run() {
 	if c.BeforeAllFilter != nil {
 		c.BeforeAllFilter()
 	}
-	for _, f := range c.Features {
-		c.runFeature(f)
+	for _, f := range c.GherkinDocuments {
+		c.runGherkinDocs(f)
 	}
 	if c.AfterAllFilter != nil {
 		c.AfterAllFilter()
 	}
 
 	c.line("0;1", "Finished (%d passed, %d failed, %d skipped).\n",
-		len(c.Results)-c.FailCount-c.SkipCount, c.FailCount, c.SkipCount)
+		len(c.Results) - c.FailCount - c.SkipCount, c.FailCount, c.SkipCount)
 }
 
-func (c *Runner) runFeature(f *gherkin.Feature) {
+func (c *Runner) runGherkinDocs(f *gherkin.Feature) {
 	if !f.FilterMatched(c.Filters...) {
 		result := false
 
@@ -194,9 +192,6 @@ func (c *Runner) runFeature(f *gherkin.Feature) {
 	c.line("0;1", "Feature: %s", f.Title)
 
 	for _, s := range f.Scenarios {
-		if f.Background.Steps != nil {
-			c.runScenario("Background", f, &f.Background, false)
-		}
 		c.runScenario("Scenario", f, &s, false)
 	}
 
@@ -217,17 +212,22 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 			fn()
 		}
 	}
-	if s.Examples != "" { // run scenario outline data
+	if s.Examples != "" {
+		// run scenario outline data
 
 		exrows := strings.Split(string(s.Examples), "\n")
 
-		c.line(clrCyan, "  "+strings.Join([]string(s.Tags), " "))
-		c.fileLine("0;1", "  %s Outline: %s", s.Filename, s.Line, s.LongestLine()+1,
+		c.line(clrCyan, "  " + strings.Join([]string(s.Tags), " "))
+		c.fileLine("0;1", "  %s Outline: %s", s.Filename, s.Line, s.LongestLine() + 1,
 			title, s.Title)
+
+		if f.Background.Steps != nil {
+			c.runScenario("Background", f, &f.Background, false)
+		}
 
 		for _, step := range s.Steps {
 			c.fileLine("0;0", "    %s %s", step.Filename, step.Line,
-				s.LongestLine()+1, step.Type, step.Text)
+				s.LongestLine() + 1, step.Type, step.Text)
 		}
 
 		c.line(clrWhite, "")
@@ -246,7 +246,7 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 			}
 			for _, step := range s.Steps {
 				step.Text = reOutlineVal.ReplaceAllStringFunc(step.Text, func(t string) string {
-					return tabmap[t[1:len(t)-1]][i-1]
+					return tabmap[t[1:len(t) - 1]][i - 1]
 				})
 				other.Steps = append(other.Steps, step)
 			}
@@ -278,7 +278,7 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 
 	if !isExample {
 		if len(s.Tags) > 0 {
-			c.line(clrCyan, "  "+strings.Join([]string(s.Tags), " "))
+			c.line(clrCyan, "  " + strings.Join([]string(s.Tags), " "))
 		}
 		c.fileLine("0;1", "  %s: %s", s.Filename, s.Line, s.LongestLine(),
 			title, s.Title)
@@ -340,7 +340,7 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 		}
 
 		if len(t.errors) > errCount {
-			c.line(clrRed, "\n"+t.errors[len(t.errors)-1].message)
+			c.line(clrRed, "\n" + t.errors[len(t.errors) - 1].message)
 		}
 	}
 	if !isExample {

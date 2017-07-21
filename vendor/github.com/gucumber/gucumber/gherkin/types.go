@@ -3,79 +3,20 @@ package gherkin
 import (
 	"reflect"
 	"strings"
+	"github.com/cucumber/gherkin-go"
 )
 
 // Feature represents the top-most construct in a Gherkin document. A feature
 // contains one or more scenarios, which in turn contains multiple steps.
-type Feature struct {
-	// The filename where the feature was defined
-	Filename string
 
-	// The line number where the feature was defined
-	Line int
-
-	// The feature's title.
-	Title string
-
-	// A longer description of the feature. This is not used during runtime.
-	Description string
-
-	// Any tags associated with this feature.
-	Tags []string
-
-	// Any background scenario data that is executed prior to scenarios.
-	Background Scenario
-
-	// The scenarios associated with this feature.
-	Scenarios []Scenario
-
-	// The longest line length in the feature (including title)
-	longestLine int
-}
+type Feature *gherkin.Feature
 
 // Scenario represents a scenario (or background) of a given feature.
-type Scenario struct {
-	// The filename where the scenario was defined
-	Filename string
-
-	// The line number where the scenario was defined
-	Line int
-
-	// The scenario's title. For backgrounds, this is the empty string.
-	Title string
-
-	// Any tags associated with this scenario.
-	Tags []string
-
-	// All steps associated with the scenario.
-	Steps []Step
-
-	// Contains all scenario outline example data, if provided.
-	Examples StringData
-
-	// The longest line length in the scenario (including title)
-	longestLine int
-}
+type Scenario *gherkin.Scenario
 
 // Step represents an individual step making up a gucumber scenario.
-type Step struct {
-	// The filename where the step was defined
-	Filename string
+type Step *gherkin.Step
 
-	// The line number where the step was defined
-	Line int
-
-	// The step's "type" (Given, When, Then, And, ...)
-	//
-	// Note that this field is normalized to the English form (e.g., "Given").
-	Type StepType
-
-	// The text contained in the step (minus the "Type" prefix).
-	Text string
-
-	// Argument represents multi-line argument data attached to a step.
-	Argument StringData
-}
 
 // StringData is multi-line docstring text attached to a step.
 type StringData string
@@ -96,7 +37,7 @@ func (s StringData) ToTable() TabularData {
 	lines := strings.Split(string(s), "\n")
 	for _, line := range lines {
 		row := strings.Split(line, "|")
-		row = row[1 : len(row)-1]
+		row = row[1 : len(row) - 1]
 		for i, c := range row {
 			row[i] = strings.TrimSpace(c)
 		}
@@ -183,7 +124,8 @@ func (s *Scenario) FilterMatched(f *Feature, filters ...string) bool {
 }
 
 func matchTags(tags []string, filters []string) bool {
-	if len(filters) == 0 { // no filters means everything passes
+	if len(filters) == 0 {
+		// no filters means everything passes
 		return true
 	}
 	for _, f := range filters {
@@ -196,15 +138,18 @@ func matchTags(tags []string, filters []string) bool {
 
 func matchFilter(filter string, tags []string) bool {
 	parts := strings.Split(filter, ",")
-	for _, part := range parts { // all parts must match
+	for _, part := range parts {
+		// all parts must match
 		part = strings.TrimSpace(part)
 		if part == "" {
 			continue
 		}
 
-		if part[0] == '~' { // filter has to NOT match any tags
+		if part[0] == '~' {
+			// filter has to NOT match any tags
 			for _, t := range tags {
-				if part[1:] == string(t) { // tag matched, this should not happen
+				if part[1:] == string(t) {
+					// tag matched, this should not happen
 					return false
 				}
 			}
@@ -212,12 +157,14 @@ func matchFilter(filter string, tags []string) bool {
 		} else {
 			result := false
 			for _, t := range tags {
-				if part == string(t) { // found a match in a tag
+				if part == string(t) {
+					// found a match in a tag
 					result = true
 					break
 				}
 			}
-			if !result { // no matches, this filter failed
+			if !result {
+				// no matches, this filter failed
 				return false
 			}
 		}
