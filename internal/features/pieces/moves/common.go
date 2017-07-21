@@ -1,4 +1,4 @@
-package pieces
+package moves
 
 import (
 	. "github.com/gucumber/gucumber"

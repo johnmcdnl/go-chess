@@ -193,11 +193,10 @@ func (c *Runner) runFeature(f *gherkin.Feature) {
 	}
 	c.line("0;1", "Feature: %s", f.Title)
 
-	if f.Background.Steps != nil {
-		c.runScenario("Background", f, &f.Background, false)
-	}
-
 	for _, s := range f.Scenarios {
+		if f.Background.Steps != nil {
+			c.runScenario("Background", f, &f.Background, false)
+		}
 		c.runScenario("Scenario", f, &s, false)
 	}
 
@@ -218,8 +217,8 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 			fn()
 		}
 	}
-
 	if s.Examples != "" { // run scenario outline data
+
 		exrows := strings.Split(string(s.Examples), "\n")
 
 		c.line(clrCyan, "  "+strings.Join([]string(s.Tags), " "))
@@ -245,7 +244,6 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 				Examples: gherkin.StringData(""),
 				Steps:    []gherkin.Step{},
 			}
-
 			for _, step := range s.Steps {
 				step.Text = reOutlineVal.ReplaceAllStringFunc(step.Text, func(t string) string {
 					return tabmap[t[1:len(t)-1]][i-1]

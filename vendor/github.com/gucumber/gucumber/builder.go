@@ -31,6 +31,7 @@ func BuildAndRunDirWithGoBuildTags(dir string, filters []string, goBuildTags str
 }
 
 func buildAndRunDir(dir string, filters []string, goBuildTags string) error {
+	buildCleanup(dir)
 	defer buildCleanup(dir)
 
 	info := buildInfo{
@@ -39,9 +40,14 @@ func buildAndRunDir(dir string, filters []string, goBuildTags string) error {
 		Filters:      filters,
 	}
 
-	goFiles, _ := filepath.Glob(filepath.Join(dir, "*.go"))
-	goFiles2, _ := filepath.Glob(filepath.Join(dir, "**", "*.go"))
-	goFiles = append(goFiles, goFiles2...)
+	//goFiles, _ := filepath.Glob(filepath.Join(dir, "*.go"))
+	var goFiles []string
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error{
+		if strings.HasSuffix(path, ".go"){
+			goFiles = append(goFiles, path)
+		}
+		return nil
+	})
 
 	// write special constants to packages so they can be imported
 	for _, file := range goFiles {
@@ -120,10 +126,15 @@ type buildInfo struct {
 }
 
 func buildCleanup(dir string) {
-	g, _ := filepath.Glob(filepath.Join(dir, importMarkerFile))
-	g2, _ := filepath.Glob(filepath.Join(dir, "**", importMarkerFile))
 
-	g = append(g, g2...)
+	var g []string
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error{
+		if strings.Contains(path, importMarkerFile){
+			g = append(g, path)
+		}
+		return nil
+	})
+
 	for _, d := range g {
 		os.Remove(d)
 	}
