@@ -27,11 +27,11 @@ Feature: Rook
     When a "<color>" "<piece>" is placed on the square "<origin>"
     Then the piece has moves available to "<validMoves>"
     Examples:
-      | piece  | color | origin | oppPiece | oppColor | oppSquare | validMoves                 |
-      | rook   | white | A1     | rook     | black    | A3        | A2 A3 B1 C1 D1 E1 F1 G1 H1 |
-      | knight | black | A1     | rook     | white    | B3        | B3 C2                      |
-      | knight | black | A1     | rook     | white    | B2        | B3 C2                      |
-      | king   | white | A1     | rook     | black    | A2        | A2 B2 B1                   |
-      | king   | white | A1     | rook     | black    | A3        | A2 B2 B1                   |
-      | bishop | white | D4     | rook     | black    | E5        | A1 B2 C3 A7 B6 C5 E3 F2 G1 |
-      | bishop | white | A1     | rook     | black    | B2        | B2                         |
+      | piece  | color | origin | oppPiece | oppColor | oppSquare | validMoves                    |
+      | rook   | white | A1     | rook     | black    | A3        | A2 A3 B1 C1 D1 E1 F1 G1 H1    |
+      | knight | black | A1     | rook     | white    | B3        | B3 C2                         |
+      | knight | black | A1     | rook     | white    | B2        | B3 C2                         |
+      | king   | white | A1     | rook     | black    | A2        | A2 B2 B1                      |
+      | king   | white | A1     | rook     | black    | A3        | A2 B2 B1                      |
+      | bishop | white | D4     | rook     | black    | E5        | A1 B2 C3 A7 B6 C5 E3 F2 G1 E5 |
+      | bishop | white | A1     | rook     | black    | B2        | B2                            |

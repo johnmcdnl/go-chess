@@ -1,6 +1,9 @@
 package chess
 
-import "github.com/satori/go.uuid"
+import (
+	"github.com/satori/go.uuid"
+	"fmt"
+)
 
 type Bishop struct {
 	Basic
@@ -30,6 +33,72 @@ func (bishop *Bishop)PieceType() PieceType {
 
 func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 	var moves []*Move
+
+	cFile := bishop.CurrentPosition().File
+	cRank := bishop.CurrentPosition().Rank
+
+	//up right
+	for i := 1; i <= 8; i++ {
+		if cFile + i <= 8 && cRank + i <= 8 {
+			d := board.GetSquare(cFile + i, cRank + i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//up left
+	for i := 1; i <= 8; i++ {
+		if cFile - i >= 1 && cRank + i <= 8 {
+			d := board.GetSquare(cFile - i, cRank + i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+
+		}
+	}
+
+
+
+
+
+
+
+
+
+	//down right
+	for i := 1; i <= 8; i++ {
+		if cFile + i <= 8 && cRank - i >= 1 {
+			d := board.GetSquare(cFile + i, cRank - i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//down right
+	for i := 1; i <= 8; i++ {
+		if cFile - i >= 1 && cRank - i >= 1 {
+			d := board.GetSquare(cFile - i, cRank - i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
 
 	return moves
 }
