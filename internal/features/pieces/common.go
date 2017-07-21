@@ -43,6 +43,8 @@ func init() {
 		switch piece{
 		case "rook":
 			p, _ = chess.NewRook(s, c)
+		case "bishop":
+			p, _ = chess.NewBishop(s, c)
 		case "knight":
 			p, _ = chess.NewKnight(s, c)
 		case "queen":
@@ -64,7 +66,6 @@ func init() {
 
 	Then(`^the piece has moves available to "(.+?)"$`, func(valid string) {
 		expectedMoves := strings.Split(valid, " ")
-		fmt.Println(expectedMoves)
 		actualMoves := currentPiece.ValidMoves(Board())
 
 		assert.Equal(T, len(expectedMoves), len(actualMoves), "Invalid number of moves")
