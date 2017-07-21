@@ -40,7 +40,6 @@ func buildAndRunDir(dir string, filters []string, goBuildTags string) error {
 		Filters:      filters,
 	}
 
-	//goFiles, _ := filepath.Glob(filepath.Join(dir, "*.go"))
 	var goFiles []string
 	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error{
 		if strings.HasSuffix(path, ".go"){
