@@ -5,6 +5,7 @@ Feature: Queen
     Given an empty board
 
   Scenario Outline: Piece in a corner of the empty board
+    Given an empty board
     When a "<color>" "<piece>" is placed on the square "<origin>"
     Then the piece has moves available to "<validMoves>"
     Examples:

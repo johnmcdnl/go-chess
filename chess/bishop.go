@@ -65,14 +65,6 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 		}
 	}
 
-
-
-
-
-
-
-
-
 	//down right
 	for i := 1; i <= 8; i++ {
 		if cFile + i <= 8 && cRank - i >= 1 {

@@ -31,6 +31,109 @@ func (q *Queen)PieceType() PieceType {
 func (q *Queen) ValidMoves(b *Board) []*Move {
 	var moves []*Move
 
+	cFile := q.CurrentPosition().File
+	cRank := q.CurrentPosition().Rank
+
+	//up right
+	for i := 1; i <= 8; i++ {
+		if cFile + i <= 8 && cRank + i <= 8 {
+			d := b.GetSquare(cFile + i, cRank + i)
+			if m := NewMove(q.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//up left
+	for i := 1; i <= 8; i++ {
+		if cFile - i >= 1 && cRank + i <= 8 {
+			d := b.GetSquare(cFile - i, cRank + i)
+			if m := NewMove(q.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+
+		}
+	}
+
+	//down right
+	for i := 1; i <= 8; i++ {
+		if cFile + i <= 8 && cRank - i >= 1 {
+			d := b.GetSquare(cFile + i, cRank - i)
+			if m := NewMove(q.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//down right
+	for i := 1; i <= 8; i++ {
+		if cFile - i >= 1 && cRank - i >= 1 {
+			d := b.GetSquare(cFile - i, cRank - i)
+			if m := NewMove(q.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//up
+	for rank := q.Position.Rank + 1; rank <= 8; rank++ {
+		d := b.GetSquare(q.CurrentPosition().File, rank)
+		if m := NewMove(q.CurrentPosition(), d); m != nil {
+			moves = append(moves, m)
+		}
+		if d.CurrentPiece != nil {
+			break
+		}
+	}
+
+	//up
+	for rank := q.Position.Rank - 1; rank >= 1; rank-- {
+		d := b.GetSquare(q.CurrentPosition().File, rank)
+		if m := NewMove(q.CurrentPosition(), d); m != nil {
+			moves = append(moves, m)
+		}
+		if d.CurrentPiece != nil {
+			break
+		}
+	}
+
+
+	//right
+	for file := q.Position.File + 1; file <= 8; file++ {
+		d := b.GetSquare(file, q.CurrentPosition().Rank)
+		if m := NewMove(q.CurrentPosition(), d); m != nil {
+			moves = append(moves, m)
+		}
+		if d.CurrentPiece != nil {
+			break
+		}
+	}
+
+	//right
+	for file := q.Position.File - 1; file >= 1; file-- {
+		d := b.GetSquare(file, q.CurrentPosition().Rank)
+		if m := NewMove(q.CurrentPosition(), d); m != nil {
+			moves = append(moves, m)
+		}
+		if d.CurrentPiece != nil {
+			break
+		}
+	}
+
 	return moves
 }
 
