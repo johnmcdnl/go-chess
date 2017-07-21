@@ -2,7 +2,6 @@ package chess
 
 import (
 	"github.com/satori/go.uuid"
-	"fmt"
 )
 
 type Bishop struct {
