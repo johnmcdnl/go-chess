@@ -18,6 +18,7 @@ func Board() *chess.Board {
 
 func init() {
 	Given(`^an empty board$`, func() {
+		b = nil
 		board, err := chess.NewEmptyBoard()
 		assert.NoError(T, err)
 		b = board
@@ -28,31 +29,8 @@ func init() {
 		var c chess.Color
 		var s *chess.Square
 
-		codes := strings.Split(square, "")
-
-		var fileNum int
-		switch codes[0]{
-		case "A":
-			fileNum = 1
-		case "B":
-			fileNum = 2
-		case "C":
-			fileNum = 3
-		case "D":
-			fileNum = 4
-		case "E":
-			fileNum = 5
-		case "F":
-			fileNum = 6
-		case "G":
-			fileNum = 7
-		case "H":
-			fileNum = 8
-		}
-
-		rank, _ := strconv.Atoi(codes[1])
-
-		s = Board().GetSquare(fileNum, rank)
+		file, rank := SquareNameToCoordinates(square)
+		s = Board().GetSquare(file, rank)
 
 		switch color{
 		case "white":
@@ -67,6 +45,8 @@ func init() {
 			p, _ = chess.NewRook(s, c)
 		case "knight":
 			p, _ = chess.NewKnight(s, c)
+		case "queen":
+			p, _ = chess.NewQueen(s, c)
 		case "king":
 			p, _ = chess.NewKing(s, c)
 
@@ -81,4 +61,54 @@ func init() {
 			fmt.Println(i, s.File, s.Rank, s.CurrentPiece)
 		}
 	})
+
+	Then(`^the piece has moves available to "(.+?)"$`, func(valid string) {
+		expectedMoves := strings.Split(valid, " ")
+		fmt.Println(expectedMoves)
+		actualMoves := currentPiece.ValidMoves(Board())
+
+		assert.Equal(T, len(expectedMoves), len(actualMoves), "Invalid number of moves")
+
+		for _, actual := range actualMoves {
+			af := actual.Destination.File
+			ar := actual.Destination.Rank
+			var foundActualMove bool
+			for _, expected := range expectedMoves {
+				ef, er := SquareNameToCoordinates(expected)
+				if ef == af && er == ar {
+					foundActualMove = true
+					break
+				}
+			}
+
+			assert.True(T, foundActualMove, "Unexpected Move: ", actual.Printer())
+		}
+
+	})
+}
+
+func SquareNameToCoordinates(s string) (file, rank int) {
+	codes := strings.Split(s, "")
+
+	switch strings.ToUpper(codes[0]){
+	case "A":
+		file = 1
+	case "B":
+		file = 2
+	case "C":
+		file = 3
+	case "D":
+		file = 4
+	case "E":
+		file = 5
+	case "F":
+		file = 6
+	case "G":
+		file = 7
+	case "H":
+		file = 8
+	}
+
+	rank, _ = strconv.Atoi(codes[1])
+	return file, rank
 }

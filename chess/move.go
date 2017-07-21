@@ -35,17 +35,14 @@ func (m *Move) IsValid() bool {
 	}
 
 	if m.Origin.CurrentPiece.PieceColor() == m.Destination.CurrentPiece.PieceColor() {
-		fmt.Println("func (m *Move) IsValid() bool  this is your own piece", m.Printer())
 		return false
 	}
 
 	if m.Destination.CurrentPiece.PieceType() == KingType {
-		fmt.Println("func (m *Move) IsValid() bool  Cannot Capture the King", m.Printer())
 		return false
 	}
 
 	if m.Origin.CurrentPiece.PieceColor() != m.Destination.CurrentPiece.PieceColor() {
-		fmt.Println("func (m *Move) IsValid() bool  Capturing MOVES!!!", m.Printer())
 		return true
 	}
 
