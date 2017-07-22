@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 
 	"github.com/cucumber/gherkin-go"
@@ -14,22 +13,16 @@ import (
 )
 
 const (
-	clrWhite = "0"
-	clrRed = "31"
-	clrGreen = "32"
-	clrYellow = "33"
-	clrCyan = "36"
-
-	txtUnmatchInt = `(\d+)`
+	txtUnmatchInt   = `(\d+)`
 	txtUnmatchFloat = `(-?\d+(?:\.\d+)?)`
-	txtUnmatchStr = `"(.+?)"`
+	txtUnmatchStr   = `"(.+?)"`
 )
 
 var (
-	reUnmatchInt = regexp.MustCompile(txtUnmatchInt)
+	reUnmatchInt   = regexp.MustCompile(txtUnmatchInt)
 	reUnmatchFloat = regexp.MustCompile(txtUnmatchFloat)
-	reUnmatchStr = regexp.MustCompile(`(<|").+?("|>)`)
-	reOutlineVal = regexp.MustCompile(`<(.+?)>`)
+	reUnmatchStr   = regexp.MustCompile(`(<|").+?("|>)`)
+	reOutlineVal   = regexp.MustCompile(`<(.+?)>`)
 )
 
 type Runner struct {
@@ -44,6 +37,15 @@ type Runner struct {
 type RunnerResult struct {
 	*TestingT
 	*gherkin.Pickle
+}
+
+func parseFile(filename string) (*gherkin.GherkinDocument, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return gherkin.ParseGherkinDocument(f)
 }
 
 func (c *Context) RunDir(dir string) (*Runner, error) {
@@ -70,15 +72,6 @@ func (c *Context) RunDir(dir string) (*Runner, error) {
 	return runner, err
 }
 
-func parseFile(filename string) (*gherkin.GherkinDocument, error) {
-	f, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	return gherkin.ParseGherkinDocument(f)
-}
-
 func (c *Context) RunFiles(featurePaths []string) (*Runner, error) {
 	r := Runner{
 		Context:          c,
@@ -95,7 +88,7 @@ func (c *Context) RunFiles(featurePaths []string) (*Runner, error) {
 		r.GherkinDocuments = append(r.GherkinDocuments, gd)
 	}
 
-	r.run()
+	r.runSuite()
 	return &r, nil
 }
 
@@ -148,7 +141,7 @@ func (r *Runner) MissingMatcherStubs() string {
 	return buf.String()
 }
 
-func (r *Runner) run() {
+func (r *Runner) runSuite() {
 	if r.BeforeAllFilter != nil {
 		r.BeforeAllFilter()
 	}
@@ -161,7 +154,7 @@ func (r *Runner) run() {
 
 	color.White(
 		fmt.Sprintf("Finished (%d passed, %d failed, %d skipped).\n",
-			len(r.Results) - r.FailCount - r.SkipCount, r.FailCount, r.SkipCount),
+			len(r.Results)-r.FailCount-r.SkipCount, r.FailCount, r.SkipCount),
 	)
 
 }
@@ -190,7 +183,6 @@ func (r *Runner) runPickle(p *gherkin.Pickle) {
 
 	t := &TestingT{}
 	var skipping bool
-	var clr = clrGreen
 
 	for _, step := range p.Steps {
 		errCount := len(t.errors)
@@ -204,10 +196,8 @@ func (r *Runner) runPickle(p *gherkin.Pickle) {
 					if t.Skipped() {
 						r.SkipCount++
 						skipping = true
-						clr = clrYellow
 					} else if t.Failed() {
 						r.FailCount++
-						clr = clrRed
 					}
 
 					done <- true
@@ -233,7 +223,7 @@ func (r *Runner) runPickle(p *gherkin.Pickle) {
 		}
 
 		if len(t.errors) > errCount {
-			color.Red("\n" + t.errors[len(t.errors) - 1].message)
+			color.Red("\n" + t.errors[len(t.errors)-1].message)
 		}
 	}
 
@@ -244,51 +234,4 @@ func (r *Runner) runPickle(p *gherkin.Pickle) {
 		//TODO
 		fmt.Sprint(k, fn)
 	}
-}
-
-type Tester interface {
-	Errorf(format string, args ...interface{})
-	Skip(args ...interface{})
-}
-
-type TestingT struct {
-	skipped bool
-	errors  []TestError
-}
-
-type TestError struct {
-	message string
-	stack   []byte
-}
-
-func (t *TestingT) Errorf(format string, args ...interface{}) {
-	var buf bytes.Buffer
-
-	str := fmt.Sprintf(format, args...)
-	sbuf := make([]byte, 8192)
-	for {
-		size := runtime.Stack(sbuf, false)
-		if size < len(sbuf) {
-			break
-		}
-		buf.Write(sbuf[0:size])
-	}
-
-	t.errors = append(t.errors, TestError{message: str, stack: buf.Bytes()})
-}
-
-func (t *TestingT) Skip(args ...interface{}) {
-	t.skipped = true
-}
-
-func (t *TestingT) Skipped() bool {
-	return t.skipped
-}
-
-func (t *TestingT) Failed() bool {
-	return len(t.errors) > 0
-}
-
-func (t *TestingT) Error(err error) {
-	t.errors = append(t.errors, TestError{message: err.Error()})
 }
