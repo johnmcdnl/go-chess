@@ -9,27 +9,27 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/shiena/ansicolor"
 	"github.com/cucumber/gherkin-go"
+	"github.com/fatih/color"
 )
 
 const (
-	clrWhite  = "0"
-	clrRed    = "31"
-	clrGreen  = "32"
+	clrWhite = "0"
+	clrRed = "31"
+	clrGreen = "32"
 	clrYellow = "33"
-	clrCyan   = "36"
+	clrCyan = "36"
 
-	txtUnmatchInt   = `(\d+)`
+	txtUnmatchInt = `(\d+)`
 	txtUnmatchFloat = `(-?\d+(?:\.\d+)?)`
-	txtUnmatchStr   = `"(.+?)"`
+	txtUnmatchStr = `"(.+?)"`
 )
 
 var (
-	reUnmatchInt   = regexp.MustCompile(txtUnmatchInt)
+	reUnmatchInt = regexp.MustCompile(txtUnmatchInt)
 	reUnmatchFloat = regexp.MustCompile(txtUnmatchFloat)
-	reUnmatchStr   = regexp.MustCompile(`(<|").+?("|>)`)
-	reOutlineVal   = regexp.MustCompile(`<(.+?)>`)
+	reUnmatchStr = regexp.MustCompile(`(<|").+?("|>)`)
+	reOutlineVal = regexp.MustCompile(`<(.+?)>`)
 )
 
 type Runner struct {
@@ -159,8 +159,11 @@ func (r *Runner) run() {
 		r.AfterAllFilter()
 	}
 
-	r.line("0;1", "Finished (%d passed, %d failed, %d skipped).\n",
-		len(r.Results)-r.FailCount-r.SkipCount, r.FailCount, r.SkipCount)
+	color.White(
+		fmt.Sprintf("Finished (%d passed, %d failed, %d skipped).\n",
+			len(r.Results) - r.FailCount - r.SkipCount, r.FailCount, r.SkipCount),
+	)
+
 }
 
 func (r *Runner) runGherkinDoc(g *gherkin.GherkinDocument) {
@@ -230,7 +233,7 @@ func (r *Runner) runPickle(p *gherkin.Pickle) {
 		}
 
 		if len(t.errors) > errCount {
-			r.line(clrRed, "\n"+t.errors[len(t.errors)-1].message)
+			color.Red("\n" + t.errors[len(t.errors) - 1].message)
 		}
 	}
 
@@ -241,21 +244,6 @@ func (r *Runner) runPickle(p *gherkin.Pickle) {
 		//TODO
 		fmt.Sprint(k, fn)
 	}
-}
-
-var writer = ansicolor.NewAnsiColorWriter(os.Stdout)
-
-func (r *Runner) line(clr, text string, args ...interface{}) {
-	fmt.Fprintf(writer, "\033[%sm%s\033[0;0m\n", clr, fmt.Sprintf(text, args...))
-}
-
-func (r *Runner) fileLine(clr, text, filename string, line int, max int, args ...interface{}) {
-	space, str := "", fmt.Sprintf(text, args...)
-	if l := max + 5 - len(str); l > 0 {
-		space = strings.Repeat(" ", l)
-	}
-	comment := fmt.Sprintf("%s \033[39;0m# %s:%d", space, filename, line)
-	r.line(clr, "%s%s", str, comment)
 }
 
 type Tester interface {
