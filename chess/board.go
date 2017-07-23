@@ -31,6 +31,19 @@ func NewBoard() (*Board, error) {
 	return &b, nil
 }
 
+func BoardFEN(fen FEN) (*Board, error) {
+	var b Board
+
+	if err := b.build(8, 8); err != nil {
+		return nil, err
+	}
+	if err := b.LoadFromFEN(fen); err != nil {
+		return nil, err
+	}
+
+	return &b, nil
+}
+
 func (b *Board) build(files, ranks int) error {
 	for rank := 1; rank <= ranks; rank++ {
 		for file := 1; file <= files; file++ {

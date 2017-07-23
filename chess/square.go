@@ -14,9 +14,13 @@ const (
 	H
 )
 
+type Coordinate struct {
+	File int
+	Rank int
+}
+
 type Square struct {
-	File         int
-	Rank         int
+	Coordinate
 	CurrentPiece Piece
 }
 

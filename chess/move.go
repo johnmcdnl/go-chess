@@ -17,7 +17,7 @@ func NewMove(origin, destination *Square) *Move {
 	m.Origin = origin
 	m.Destination = destination
 
-	if !m.IsValid(){
+	if !m.IsValid() {
 		return nil
 	}
 
@@ -28,9 +28,38 @@ func (m *Move) Printer() string {
 	return fmt.Sprint("Origin: ", m.Origin.PrettyPrint(), " Destination: ", m.Destination.PrettyPrint())
 }
 
+func (m *Move)PGNName() string {
+
+	if m.Origin.CurrentPiece==nil{
+		return "I AM NIL"
+	}
+
+	var pieceNameCode string
+	switch m.Origin.CurrentPiece.PieceType() {
+	default:
+		fmt.Println(m.Origin.CurrentPiece.PieceType())
+		fmt.Println(m.Origin.CurrentPiece.CurrentPosition())
+		fmt.Println(m.Origin.CurrentPiece.PieceColor())
+		return fmt.Sprintln("I AM INVALID")
+	case KingType:
+		pieceNameCode="K"
+	case QueenType:
+		pieceNameCode="Q"
+	case RookType:
+		pieceNameCode="R"
+	case BishopType:
+		pieceNameCode="B"
+	case KnightType:
+		pieceNameCode="N"
+	case PawnType:
+		pieceNameCode="I AM A PAWN"
+	}
+	return fmt.Sprint(pieceNameCode)
+}
+
 func (m *Move) IsValid() bool {
 
-	if m.Destination.CurrentPiece==nil{
+	if m.Destination.CurrentPiece == nil {
 		return true
 	}
 
