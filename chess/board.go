@@ -4,8 +4,20 @@ import (
 	"fmt"
 )
 
+type CastlingRights struct {
+	WhiteKingSideAvailable  bool
+	WhiteQueenSideAvailable bool
+	BlackKingSideAvailable  bool
+	BlackQueenSideAvailable bool
+}
+
 type Board struct {
-	Squares []*Square
+	Squares         []*Square
+	ActiveColor     Color
+	CastlingRights  CastlingRights
+	EnPassantSquare *Square
+	HalfMoveClock   int
+	FullMoveNumber  int
 }
 
 func NewEmptyBoard() (*Board, error) {
@@ -14,6 +26,16 @@ func NewEmptyBoard() (*Board, error) {
 	if err := b.build(8, 8); err != nil {
 		return nil, err
 	}
+	b.ActiveColor = White
+	b.CastlingRights = CastlingRights{
+		WhiteKingSideAvailable:true,
+		WhiteQueenSideAvailable:true,
+		BlackKingSideAvailable:true,
+		BlackQueenSideAvailable:true,
+	}
+	b.EnPassantSquare = nil
+	b.HalfMoveClock = 0
+	b.FullMoveNumber = 1
 
 	return &b, nil
 }
@@ -77,13 +99,13 @@ func (b *Board) LoadFromFEN(f FEN) error {
 		}
 
 		//White
-		if s.File == E && s.Rank == 1  {
+		if s.File == E && s.Rank == 1 {
 			k, _ := NewKing(s, White)
 			s.SetPiece(k)
 		}
 
 		//DUMMY
-		if s.File == A && s.Rank == 3  {
+		if s.File == A && s.Rank == 3 {
 			k, _ := NewRook(s, Black)
 			s.SetPiece(k)
 		}
@@ -103,7 +125,7 @@ func (b *Board) LoadFromFEN(f FEN) error {
 		}
 
 		//White
-		if s.File == E && s.Rank == 8  {
+		if s.File == E && s.Rank == 8 {
 			k, _ := NewKing(s, Black)
 			s.SetPiece(k)
 		}
