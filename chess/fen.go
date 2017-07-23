@@ -8,6 +8,10 @@ import (
 
 type FEN string
 
+const (
+	StartingPositionFEN = FEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+)
+
 func NewFEN(f string) *FEN {
 	fen := FEN(f)
 	return &fen
@@ -48,42 +52,52 @@ func (f *FEN)Apply(b *Board) {
 
 		fenFile := strings.Split(fenPiecePlacement, "")
 
+		fmt.Println(fenFile)
+		alreadySkipped := 0
 		for fenFileIndex, fenFileData := range fenFile {
-			if empty, err := strconv.Atoi(fenFileData); err == nil {
-				boardIndex += empty
-				continue
-			}
-			var p Piece
-			s := b.GetSquare(fenFileIndex + 1, fenRank + 1)
-			switch fenFileData {
-			case "K":
-				p, _ = NewKing(s, White)
-			case "Q":
-				p, _ = NewQueen(s, White)
-			case "R":
-				p, _ = NewRook(s, White)
-			case "B":
-				p, _ = NewBishop(s, White)
-			case "N":
-				p, _ = NewKnight(s, White)
-			case "P":
-				p, _ = NewPawn(s, White)
 
-			case "k":
-				p, _ = NewKing(s, Black)
-			case "q":
-				p, _ = NewQueen(s, Black)
-			case "r":
-				p, _ = NewRook(s, Black)
-			case "b":
-				p, _ = NewBishop(s, Black)
-			case "n":
-				p, _ = NewKnight(s, Black)
-			case "p":
-				p, _ = NewPawn(s, Black)
+			emptySquares, err := strconv.Atoi(fenFileData);
+			if err == nil {
+				fmt.Println("okay why not")
+				fmt.Println(emptySquares, err, boardIndex)
+				//time.Sleep(time.Second * 3)
+				boardIndex += emptySquares
+				alreadySkipped += emptySquares-1
+			} else {
+				var p Piece
+				s := b.GetSquare(fenFileIndex + 1 + alreadySkipped, fenRank + 1)
+				switch fenFileData {
+				case "K":
+					p, _ = NewKing(s, White)
+				case "Q":
+					p, _ = NewQueen(s, White)
+				case "R":
+					p, _ = NewRook(s, White)
+				case "B":
+					p, _ = NewBishop(s, White)
+				case "N":
+					p, _ = NewKnight(s, White)
+				case "P":
+					p, _ = NewPawn(s, White)
+
+				case "k":
+					p, _ = NewKing(s, Black)
+				case "q":
+					p, _ = NewQueen(s, Black)
+				case "r":
+					p, _ = NewRook(s, Black)
+				case "b":
+					p, _ = NewBishop(s, Black)
+				case "n":
+					p, _ = NewKnight(s, Black)
+				case "p":
+					p, _ = NewPawn(s, Black)
+				}
+				s.SetPiece(p)
+				boardIndex++
 			}
-			s.SetPiece(p)
 			boardIndex++
+
 		}
 
 	}

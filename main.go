@@ -7,7 +7,7 @@ import (
 
 func main() {
 	board, _ := chess.NewEmptyBoard()
-	chess.NewFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 20 21").Apply(board)
+	chess.NewFEN("k1r4P/1r1r2P1/r3rP2/4Pr2/3P2r1/2P4r/1P2K1r1/P4r2 w - - 0 1").Apply(board)
 
 	fmt.Println("board.ActiveColor", board.ActiveColor)
 	fmt.Println("board.CastlingRights", board.CastlingRights)
@@ -15,4 +15,5 @@ func main() {
 	fmt.Println(board.HalfMoveClock)
 	fmt.Println(board.FullMoveNumber)
 
+	board.Print()
 }
