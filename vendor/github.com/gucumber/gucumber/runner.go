@@ -6,30 +6,23 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 
-	"github.com/shiena/ansicolor"
 	"github.com/cucumber/gherkin-go"
+	"github.com/fatih/color"
 )
 
 const (
-	clrWhite = "0"
-	clrRed = "31"
-	clrGreen = "32"
-	clrYellow = "33"
-	clrCyan = "36"
-
-	txtUnmatchInt = `(\d+)`
+	txtUnmatchInt   = `(\d+)`
 	txtUnmatchFloat = `(-?\d+(?:\.\d+)?)`
-	txtUnmatchStr = `"(.+?)"`
+	txtUnmatchStr   = `"(.+?)"`
 )
 
 var (
-	reUnmatchInt = regexp.MustCompile(txtUnmatchInt)
+	reUnmatchInt   = regexp.MustCompile(txtUnmatchInt)
 	reUnmatchFloat = regexp.MustCompile(txtUnmatchFloat)
-	reUnmatchStr = regexp.MustCompile(`(<|").+?("|>)`)
-	reOutlineVal = regexp.MustCompile(`<(.+?)>`)
+	reUnmatchStr   = regexp.MustCompile(`(<|").+?("|>)`)
+	reOutlineVal   = regexp.MustCompile(`<(.+?)>`)
 )
 
 type Runner struct {
@@ -43,8 +36,16 @@ type Runner struct {
 
 type RunnerResult struct {
 	*TestingT
-	*gherkin.GherkinDocument //TODO might not need this - pickle should have enough context?
 	*gherkin.Pickle
+}
+
+func parseFile(filename string) (*gherkin.GherkinDocument, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return gherkin.ParseGherkinDocument(f)
 }
 
 func (c *Context) RunDir(dir string) (*Runner, error) {
@@ -71,21 +72,12 @@ func (c *Context) RunDir(dir string) (*Runner, error) {
 	return runner, err
 }
 
-func parseFile(filename string) (*gherkin.GherkinDocument, error) {
-	f, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	return gherkin.ParseGherkinDocument(f)
-}
-
 func (c *Context) RunFiles(featurePaths []string) (*Runner, error) {
 	r := Runner{
-		Context:   c,
-		GherkinDocuments:  []*gherkin.GherkinDocument{},
-		Results:   []RunnerResult{},
-		Unmatched: []*gherkin.Step{},
+		Context:          c,
+		GherkinDocuments: []*gherkin.GherkinDocument{},
+		Results:          []RunnerResult{},
+		Unmatched:        []*gherkin.Step{},
 	}
 
 	for _, filePath := range featurePaths {
@@ -93,21 +85,21 @@ func (c *Context) RunFiles(featurePaths []string) (*Runner, error) {
 		if err != nil {
 			return nil, err
 		}
-		r.GherkinDocuments = append(r.GherkinDocuments, &gd)
+		r.GherkinDocuments = append(r.GherkinDocuments, gd)
 	}
 
-	r.run()
+	r.runSuite()
 	return &r, nil
 }
 
-func (c *Runner) MissingMatcherStubs() string {
+func (r *Runner) MissingMatcherStubs() string {
 	var buf bytes.Buffer
 	matches := map[string]bool{}
 
 	buf.WriteString(`import . "github.com/gucumber/gucumber"` + "\n\n")
 	buf.WriteString("func init() {\n")
 
-	for _, m := range c.Unmatched {
+	for _, m := range r.Unmatched {
 		numInts, numFloats, numStrs := 1, 1, 1
 		str, args := m.Text, []string{}
 		str = reUnmatchInt.ReplaceAllStringFunc(str, func(s string) string {
@@ -126,13 +118,14 @@ func (c *Runner) MissingMatcherStubs() string {
 			return txtUnmatchStr
 		})
 
-		if len(m.Argument) > 0 {
-			if m.Argument.IsTabular() {
-				args = append(args, "table [][]string")
-			} else {
-				args = append(args, "data string")
-			}
-		}
+		//TODO
+		//if len(m.Argument) > 0 {
+		//	if m.Argument.IsTabular() {
+		//		args = append(args, "table [][]string")
+		//	} else {
+		//		args = append(args, "data string")
+		//	}
+		//}
 
 		// Don't duplicate matchers. This is mostly for scenario outlines.
 		if matches[str] {
@@ -148,164 +141,75 @@ func (c *Runner) MissingMatcherStubs() string {
 	return buf.String()
 }
 
-func (c *Runner) run() {
-	if c.BeforeAllFilter != nil {
-		c.BeforeAllFilter()
+func (r *Runner) runSuite() {
+	if r.BeforeAllFilter != nil {
+		r.BeforeAllFilter()
 	}
-	for _, f := range c.GherkinDocuments {
-		c.runGherkinDocs(f)
+	for _, g := range r.GherkinDocuments {
+		r.runGherkinDoc(g)
 	}
-	if c.AfterAllFilter != nil {
-		c.AfterAllFilter()
+	if r.AfterAllFilter != nil {
+		r.AfterAllFilter()
 	}
 
-	c.line("0;1", "Finished (%d passed, %d failed, %d skipped).\n",
-		len(c.Results) - c.FailCount - c.SkipCount, c.FailCount, c.SkipCount)
+	color.White(
+		fmt.Sprintf("Finished (%d passed, %d failed, %d skipped).\n",
+			len(r.Results)-r.FailCount-r.SkipCount, r.FailCount, r.SkipCount),
+	)
+
 }
 
-func (c *Runner) runGherkinDocs(f *gherkin.Feature) {
-	if !f.FilterMatched(c.Filters...) {
-		result := false
-
-		// if any scenarios match, we will run those
-		for _, s := range f.Scenarios {
-			if s.FilterMatched(f, c.Filters...) {
-				result = true
-				break
-			}
-		}
-
-		if !result {
-			return
-		}
+func (r *Runner) runGherkinDoc(g *gherkin.GherkinDocument) {
+	for _, p := range g.Pickles() {
+		r.runPickle(p)
 	}
 
-	for k, fn := range c.BeforeFilters {
-		if f.FilterMatched(strings.Split(k, "|")...) {
-			fn()
-		}
-	}
-
-	if len(f.Tags) > 0 {
-		c.line(clrCyan, strings.Join([]string(f.Tags), " "))
-	}
-	c.line("0;1", "Feature: %s", f.Title)
-
-	for _, s := range f.Scenarios {
-		c.runScenario("Scenario", f, &s, false)
-	}
-
-	for k, fn := range c.AfterFilters {
-		if f.FilterMatched(strings.Split(k, "|")...) {
-			fn()
-		}
-	}
 }
 
-func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenario, isExample bool) {
-	if !s.FilterMatched(f, c.Filters...) {
-		return
-	}
+func (r *Runner) runPickle(p *gherkin.Pickle) {
+	//TODO
+	//if !s.FilterMatched(f, c.Filters...) {
+	//	return
+	//
+	//}
 
-	for k, fn := range c.BeforeFilters {
-		if s.FilterMatched(f, strings.Split(k, "|")...) {
-			fn()
-		}
-	}
-	if s.Examples != "" {
-		// run scenario outline data
-
-		exrows := strings.Split(string(s.Examples), "\n")
-
-		c.line(clrCyan, "  " + strings.Join([]string(s.Tags), " "))
-		c.fileLine("0;1", "  %s Outline: %s", s.Filename, s.Line, s.LongestLine() + 1,
-			title, s.Title)
-
-		if f.Background.Steps != nil {
-			c.runScenario("Background", f, &f.Background, false)
-		}
-
-		for _, step := range s.Steps {
-			c.fileLine("0;0", "    %s %s", step.Filename, step.Line,
-				s.LongestLine() + 1, step.Type, step.Text)
-		}
-
-		c.line(clrWhite, "")
-		c.line("0;1", "  Examples:")
-		c.line(clrCyan, "    %s", exrows[0])
-
-		tab := s.Examples.ToTable()
-		tabmap := tab.ToMap()
-		for i, rows := 1, len(tab); i < rows; i++ {
-			other := gherkin.Scenario{
-				Filename: s.Filename,
-				Line:     s.Line,
-				Title:    s.Title,
-				Examples: gherkin.StringData(""),
-				Steps:    []gherkin.Step{},
-			}
-			for _, step := range s.Steps {
-				step.Text = reOutlineVal.ReplaceAllStringFunc(step.Text, func(t string) string {
-					return tabmap[t[1:len(t) - 1]][i - 1]
-				})
-				other.Steps = append(other.Steps, step)
-			}
-
-			fc := c.FailCount
-			clr := clrGreen
-			c.runScenario(title, f, &other, true)
-
-			if fc != c.FailCount {
-				clr = clrRed
-			}
-
-			c.line(clr, "    %s", exrows[i])
-		}
-		c.line(clrWhite, "")
-
-		for k, fn := range c.AfterFilters {
-			if s.FilterMatched(f, strings.Split(k, "|")...) {
-				fn()
-			}
-		}
-
-		return
+	for k, fn := range r.BeforeFilters {
+		//TODO
+		//if s.FilterMatched(f, strings.Split(k, "|")...) {
+		//	fn()
+		//}
+		fmt.Sprint(k, fn)
 	}
 
 	t := &TestingT{}
-	skipping := false
-	clr := clrGreen
+	var skipping bool
 
-	if !isExample {
-		if len(s.Tags) > 0 {
-			c.line(clrCyan, "  " + strings.Join([]string(s.Tags), " "))
-		}
-		c.fileLine("0;1", "  %s: %s", s.Filename, s.Line, s.LongestLine(),
-			title, s.Title)
-	}
-
-	for _, step := range s.Steps {
+	for _, step := range p.Steps {
 		errCount := len(t.errors)
 		found := false
 		if !skipping && !t.Failed() {
 			done := make(chan bool)
 			go func() {
 				defer func() {
-					c.Results = append(c.Results, RunnerResult{t, f, s})
+					r.Results = append(r.Results, RunnerResult{t, p})
 
 					if t.Skipped() {
-						c.SkipCount++
+						r.SkipCount++
 						skipping = true
-						clr = clrYellow
 					} else if t.Failed() {
-						c.FailCount++
-						clr = clrRed
+						r.FailCount++
 					}
 
 					done <- true
 				}()
 
-				f, err := c.Execute(t, step.Text, string(step.Argument))
+				//TODO
+				args := "TODO"
+				if len(step.Arguments) == 0 {
+					args = ""
+				}
+
+				f, err := r.Execute(t, step.Text, string(args))
 				if err != nil {
 					t.Error(err)
 				}
@@ -318,100 +222,16 @@ func (c *Runner) runScenario(title string, f *gherkin.Feature, s *gherkin.Scenar
 			<-done
 		}
 
-		if skipping && !found {
-			cstep := step
-			c.Unmatched = append(c.Unmatched, &cstep)
-		}
-
-		if !isExample {
-			c.fileLine(clr, "    %s %s", step.Filename, step.Line,
-				s.LongestLine(), step.Type, step.Text)
-			if len(step.Argument) > 0 {
-				if !step.Argument.IsTabular() {
-					c.line(clrWhite, `      """`)
-				}
-				for _, l := range strings.Split(string(step.Argument), "\n") {
-					c.line(clrWhite, "      %s", l)
-				}
-				if !step.Argument.IsTabular() {
-					c.line(clrWhite, `      """`)
-				}
-			}
-		}
-
 		if len(t.errors) > errCount {
-			c.line(clrRed, "\n" + t.errors[len(t.errors) - 1].message)
+			color.Red("\n" + t.errors[len(t.errors)-1].message)
 		}
 	}
-	if !isExample {
-		c.line(clrWhite, "")
+
+	for k, fn := range r.AfterFilters {
+		//if s.FilterMatched(f, strings.Split(k, "|")...) {
+		//	fn()
+		//}
+		//TODO
+		fmt.Sprint(k, fn)
 	}
-
-	for k, fn := range c.AfterFilters {
-		if s.FilterMatched(f, strings.Split(k, "|")...) {
-			fn()
-		}
-	}
-}
-
-var writer = ansicolor.NewAnsiColorWriter(os.Stdout)
-
-func (c *Runner) line(clr, text string, args ...interface{}) {
-	fmt.Fprintf(writer, "\033[%sm%s\033[0;0m\n", clr, fmt.Sprintf(text, args...))
-}
-
-func (c *Runner) fileLine(clr, text, filename string, line int, max int, args ...interface{}) {
-	space, str := "", fmt.Sprintf(text, args...)
-	if l := max + 5 - len(str); l > 0 {
-		space = strings.Repeat(" ", l)
-	}
-	comment := fmt.Sprintf("%s \033[39;0m# %s:%d", space, filename, line)
-	c.line(clr, "%s%s", str, comment)
-}
-
-type Tester interface {
-	Errorf(format string, args ...interface{})
-	Skip(args ...interface{})
-}
-
-type TestingT struct {
-	skipped bool
-	errors  []TestError
-}
-
-type TestError struct {
-	message string
-	stack   []byte
-}
-
-func (t *TestingT) Errorf(format string, args ...interface{}) {
-	var buf bytes.Buffer
-
-	str := fmt.Sprintf(format, args...)
-	sbuf := make([]byte, 8192)
-	for {
-		size := runtime.Stack(sbuf, false)
-		if size < len(sbuf) {
-			break
-		}
-		buf.Write(sbuf[0:size])
-	}
-
-	t.errors = append(t.errors, TestError{message: str, stack: buf.Bytes()})
-}
-
-func (t *TestingT) Skip(args ...interface{}) {
-	t.skipped = true
-}
-
-func (t *TestingT) Skipped() bool {
-	return t.skipped
-}
-
-func (t *TestingT) Failed() bool {
-	return len(t.errors) > 0
-}
-
-func (t *TestingT) Error(err error) {
-	t.errors = append(t.errors, TestError{message: err.Error()})
 }

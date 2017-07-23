@@ -41,8 +41,8 @@ func buildAndRunDir(dir string, filters []string, goBuildTags string) error {
 	}
 
 	var goFiles []string
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error{
-		if strings.HasSuffix(path, ".go"){
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if strings.HasSuffix(path, ".go") {
 			goFiles = append(goFiles, path)
 		}
 		return nil
@@ -127,8 +127,8 @@ type buildInfo struct {
 func buildCleanup(dir string) {
 
 	var g []string
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error{
-		if strings.Contains(path, importMarkerFile){
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if strings.Contains(path, importMarkerFile) {
 			g = append(g, path)
 		}
 		return nil
