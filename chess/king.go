@@ -3,7 +3,7 @@ package chess
 import "github.com/satori/go.uuid"
 
 type King struct {
-	Basic
+	BasePiece
 }
 
 func NewKing(s *Square, c Color) (*King, error) {

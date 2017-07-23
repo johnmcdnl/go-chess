@@ -3,7 +3,7 @@ package chess
 import "github.com/satori/go.uuid"
 
 type Pawn struct {
-	Basic
+	BasePiece
 }
 
 func NewPawn(s *Square, c Color) (*Pawn, error) {

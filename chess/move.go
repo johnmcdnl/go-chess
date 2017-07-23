@@ -67,23 +67,18 @@ func (m *Move)PGNName() string {
 }
 
 func (m *Move)IsCapturingMove()bool{
-	fmt.Println(m.Origin.Name(), m.Destination.Name())
 	if m.Destination.CurrentPiece==nil{
-		fmt.Println("Nothing to capture")
 		return false
 	}
 	if m.Destination.CurrentPiece.PieceColor() == m.Origin.CurrentPiece.PieceColor(){
-		fmt.Println("can't capture own color")
 		return false
 	}
 
 	if m.Destination.CurrentPiece.PieceType()==KingType{
-		fmt.Println("can't capture king")
 		return false
 	}
 
 	if m.Destination.CurrentPiece!=nil{
-		fmt.Println("this is a capture move")
 		return true
 	}
 	panic("I missed something obvious")

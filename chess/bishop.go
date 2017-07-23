@@ -5,7 +5,7 @@ import (
 )
 
 type Bishop struct {
-	Basic
+	BasePiece
 }
 
 func NewBishop(s *Square, c Color) (*Bishop, error) {

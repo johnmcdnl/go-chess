@@ -1,6 +1,6 @@
 package chess
 
-type Basic struct {
+type BasePiece struct {
 	ID       string
 	Color    Color
 	Name     string

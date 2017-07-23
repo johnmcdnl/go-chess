@@ -5,7 +5,7 @@ import (
 )
 
 type Knight struct {
-	Basic
+	BasePiece
 }
 
 func NewKnight(s *Square, c Color) (*Knight, error) {

@@ -3,7 +3,7 @@ package chess
 import "github.com/satori/go.uuid"
 
 type Rook struct {
-	Basic
+	BasePiece
 }
 
 func NewRook(s *Square, c Color) (*Rook, error) {

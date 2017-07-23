@@ -3,7 +3,7 @@ package chess
 import "github.com/satori/go.uuid"
 
 type Queen struct {
-	Basic
+	BasePiece
 }
 
 func NewQueen(s *Square, c Color) (*Queen, error) {
