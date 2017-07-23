@@ -2,7 +2,6 @@ package chess
 
 import (
 	"strings"
-	"fmt"
 	"strconv"
 )
 
@@ -52,15 +51,11 @@ func (f *FEN)Apply(b *Board) {
 
 		fenFile := strings.Split(fenPiecePlacement, "")
 
-		fmt.Println(fenFile)
 		alreadySkipped := 0
 		for fenFileIndex, fenFileData := range fenFile {
 
 			emptySquares, err := strconv.Atoi(fenFileData);
 			if err == nil {
-				fmt.Println("okay why not")
-				fmt.Println(emptySquares, err, boardIndex)
-				//time.Sleep(time.Second * 3)
 				boardIndex += emptySquares
 				alreadySkipped += emptySquares-1
 			} else {
@@ -147,7 +142,6 @@ func (f *FEN)Apply(b *Board) {
 		b.EnPassantSquare = nil
 	} else {
 		enPassantFileRankArr := strings.Split(boardInfoArray[2], "")
-		fmt.Println(enPassantFileRankArr)
 
 		enPassantRank, _ := strconv.Atoi(enPassantFileRankArr[1])
 

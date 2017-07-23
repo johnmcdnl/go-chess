@@ -23,6 +23,7 @@ func TestMove_PGNName(t *testing.T) {
 		want   string
 	}{
 		{"Qd8xd5", fields{board: boardFEN(FEN("3q4/8/8/3P4/8/8/8/8 w KQkq - 1 1")), Origin:Coordinate{D, 8}, Destination:Coordinate{D, 5}}, "Qd8xd5"},
+		{"Qd8d5", fields{board: boardFEN(FEN("3q4/8/8/8/8/8/8/8 w KQkq - 1 1")), Origin:Coordinate{D, 8}, Destination:Coordinate{D, 5}}, "Qd8d5"},
 		//{"Qd8xb6", fields{board: boardFEN(FEN("3q4/8/1P6/8/8/8/8/8 w KQkq - 1 1")), Origin:Coordinate{D, 8}, Destination:Coordinate{B, 6}}, "Qd8xb6"},
 		//{"Ne3d5", fields{board: boardFEN(FEN("8/8/8/3p4/8/4N3/8/8 w KQkq - 1 1")), Origin:Coordinate{E, 3}, Destination:Coordinate{D, 5}}, "Ne3d5"},
 	}

@@ -1,10 +1,13 @@
 package chess
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Move struct {
-	Origin      *Square
-	Destination *Square
+	Origin          *Square
+	Destination     *Square
 }
 
 //New returns a Move or and error if the provided squares are invalid
@@ -30,7 +33,7 @@ func (m *Move) Printer() string {
 
 func (m *Move)PGNName() string {
 
-	if m.Origin.CurrentPiece==nil{
+	if m.Origin.CurrentPiece == nil {
 		return "I AM NIL"
 	}
 
@@ -42,19 +45,49 @@ func (m *Move)PGNName() string {
 		fmt.Println(m.Origin.CurrentPiece.PieceColor())
 		return fmt.Sprintln("I AM INVALID")
 	case KingType:
-		pieceNameCode="K"
+		pieceNameCode = "K"
 	case QueenType:
-		pieceNameCode="Q"
+		pieceNameCode = "Q"
 	case RookType:
-		pieceNameCode="R"
+		pieceNameCode = "R"
 	case BishopType:
-		pieceNameCode="B"
+		pieceNameCode = "B"
 	case KnightType:
-		pieceNameCode="N"
+		pieceNameCode = "N"
 	case PawnType:
-		pieceNameCode="I AM A PAWN"
+		pieceNameCode = "I AM A PAWN"
 	}
-	return fmt.Sprint(pieceNameCode)
+	//Qd8xd5
+
+	var isCapture = ""
+	if m.IsCapturingMove() {
+		isCapture = "x"
+	}
+	return fmt.Sprintf("%s%s%s%s", pieceNameCode, strings.ToLower(m.Origin.Name()), isCapture, strings.ToLower(m.Destination.Name()))
+}
+
+func (m *Move)IsCapturingMove()bool{
+	fmt.Println(m.Origin.Name(), m.Destination.Name())
+	if m.Destination.CurrentPiece==nil{
+		fmt.Println("Nothing to capture")
+		return false
+	}
+	if m.Destination.CurrentPiece.PieceColor() == m.Origin.CurrentPiece.PieceColor(){
+		fmt.Println("can't capture own color")
+		return false
+	}
+
+	if m.Destination.CurrentPiece.PieceType()==KingType{
+		fmt.Println("can't capture king")
+		return false
+	}
+
+	if m.Destination.CurrentPiece!=nil{
+		fmt.Println("this is a capture move")
+		return true
+	}
+	panic("I missed something obvious")
+	return false
 }
 
 func (m *Move) IsValid() bool {
