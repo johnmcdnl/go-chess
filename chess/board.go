@@ -1,82 +1,146 @@
 package chess
 
+import (
+	"fmt"
+)
+
+type CastlingRights struct {
+	WhiteKingSideAvailable  bool
+	WhiteQueenSideAvailable bool
+	BlackKingSideAvailable  bool
+	BlackQueenSideAvailable bool
+}
+
 type Board struct {
-	Squares *[]*Square
+	Squares         []*Square
+	ActiveColor     Color
+	CastlingRights  *CastlingRights
+	EnPassantSquare *Square
+	HalfMoveClock   int
+	FullMoveNumber  int
 }
 
-func NewBoard() *Board {
+func NewEmptyBoard() (*Board, error) {
 	var b Board
-	var squares []*Square
-	for rank := 1; rank <= 8; rank++ {
-		for file := 1; file <= 8; file++ {
-			s := NewSquare(file, rank)
-			squares = append(squares, s)
-		}
+
+	if err := b.build(8, 8); err != nil {
+		return nil, err
 	}
-	b.Squares = &squares
-	b.setStartingPosition()
-	return &b
+	b.ActiveColor = White
+	b.CastlingRights = &CastlingRights{
+		WhiteKingSideAvailable:true,
+		WhiteQueenSideAvailable:true,
+		BlackKingSideAvailable:true,
+		BlackQueenSideAvailable:true,
+	}
+	b.EnPassantSquare = nil
+	b.HalfMoveClock = 0
+	b.FullMoveNumber = 1
+
+	return &b, nil
 }
 
-func (b *Board) setStartingPosition() {
-	for _, s := range *b.Squares {
-		if s.Rank == 2 {
-			cp := NewPawn(s, White)
-			s.ChessPiece = cp
+func NewBoard() (*Board, error) {
+	var b Board
+
+	if err := b.build(8, 8); err != nil {
+		return nil, err
+	}
+	if err := b.LoadFromFEN(FEN("TODO")); err != nil {
+		return nil, err
+	}
+
+	return &b, nil
+}
+
+func BoardFEN(fen FEN) (*Board, error) {
+	var b Board
+
+	if err := b.build(8, 8); err != nil {
+		return nil, err
+	}
+	if err := b.LoadFromFEN(fen); err != nil {
+		return nil, err
+	}
+
+	return &b, nil
+}
+
+func (b *Board) build(files, ranks int) error {
+	for rank := 1; rank <= ranks; rank++ {
+		for file := 1; file <= files; file++ {
+			s, err := NewSquare(file, rank)
+			if err != nil {
+				return err
+			}
+			b.Squares = append(b.Squares, s)
 		}
-		if s.Rank == 7 {
-			cp := NewPawn(s, Black)
-			s.ChessPiece = cp
+	}
+	return nil
+}
+
+func (b *Board) LoadFromFEN(f FEN) error {
+	if !f.IsValid() {
+		return fmt.Errorf("Invalid FEN %s", f)
+	}
+
+	for _, s := range b.Squares {
+
+		//White
+		if (s.File == A && s.Rank == 1) || (s.File == H && s.Rank == 1) {
+			r, _ := NewRook(s, White)
+			s.SetPiece(r)
 		}
 
-		if s.Name == "b1" || s.Name == "g1" {
-			cp := NewKnight(s, White)
-			s.ChessPiece = cp
-		}
-		if s.Name == "b8" || s.Name == "g8" {
-			cp := NewKnight(s, Black)
-			s.ChessPiece = cp
+		//White
+		if (s.File == B && s.Rank == 1) || (s.File == G && s.Rank == 1) {
+			k, _ := NewKnight(s, White)
+			s.SetPiece(k)
 		}
 
-		if s.Name == "a1" || s.Name == "h1" {
-			cp := NewRook(s, White)
-			s.ChessPiece = cp
-		}
-		if s.Name == "a8" || s.Name == "h8" {
-			cp := NewRook(s, Black)
-			s.ChessPiece = cp
+		//White
+		if s.File == E && s.Rank == 1 {
+			k, _ := NewKing(s, White)
+			s.SetPiece(k)
 		}
 
-		if s.Name == "c1" || s.Name == "f1" {
-			cp := NewBishop(s, White)
-			s.ChessPiece = cp
+		//DUMMY
+		if s.File == A && s.Rank == 3 {
+			k, _ := NewRook(s, Black)
+			s.SetPiece(k)
 		}
-		if s.Name == "c8" || s.Name == "f8" {
-			cp := NewBishop(s, Black)
-			s.ChessPiece = cp
+
+
+
+		//Black
+		if (s.File == A && s.Rank == 8) || (s.File == H && s.Rank == 8) {
+			r, _ := NewRook(s, Black)
+			s.SetPiece(r)
+		}
+
+		//Black
+		if (s.File == B && s.Rank == 8) || (s.File == G && s.Rank == 8) {
+			k, _ := NewKnight(s, Black)
+			s.SetPiece(k)
+		}
+
+		//White
+		if s.File == E && s.Rank == 8 {
+			k, _ := NewKing(s, Black)
+			s.SetPiece(k)
 		}
 
 	}
-}
 
-func (b *Board) SetFEN(fen FEN) {
-	if !fen.IsValid() {
-		return
-	}
-}
-
-func (b *Board) GetFen() FEN {
-	return StartingPositionFEN
+	return nil
 }
 
 func (b *Board) GetSquare(file, rank int) *Square {
-	if file < 1 || file > 8 || rank < 1 || rank > 8 {
-		return nil
-	}
-	for _, s := range *b.Squares {
+	for _, s := range b.Squares {
 		if s.File == file && s.Rank == rank {
 			return s
 		}
 	}
+
 	return nil
 }

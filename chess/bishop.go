@@ -1,92 +1,96 @@
 package chess
 
-type Bishop Piece
+import (
+	"github.com/satori/go.uuid"
+)
 
-func NewBishop(s *Square, c Color) *Bishop {
-	var b Bishop
-	b.Name = "bishop"
-	b.Code = BishopPiece
-	b.Position = s
-	b.Color = c
-
-	s.ChessPiece = &b
-	return &b
+type Bishop struct {
+	Basic
 }
 
-func (bishop *Bishop) ValidMoves(board *Board) []*Move {
-	var moves []*Move
-
-	cRank := bishop.Position.Rank
-	cFile := bishop.Position.File
-
-
-	//up left
-	for i := 1; i < 8; i++ {
-		tFile := cFile - i
-		tRank := cRank + i
-		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
-			break
-		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
-		if err != nil {
-			break
-		}
-		moves = append(moves, m)
-	}
-
-	//up right
-	for i := 1; i < 8; i++ {
-		tFile := cFile + i
-		tRank := cRank + i
-		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
-			break
-		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
-		if err != nil {
-			break
-		}
-		moves = append(moves, m)
-	}
-
-
-	//down left
-	for i := 1; i < 8; i++ {
-		tFile := cFile - i
-		tRank := cRank - i
-		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
-			break
-		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
-		if err != nil {
-			break
-		}
-		moves = append(moves, m)
-	}
-
-	//down right
-	for i := 1; i < 8; i++ {
-		tFile := cFile + i
-		tRank := cRank - i
-		if tFile <= 1 && tRank <= 1 && tFile >= 8 && tRank >= 8 {
-			break
-		}
-		m, err := NewMove(bishop.Position, board.GetSquare(tFile, tRank));
-		if err != nil {
-			break
-		}
-		moves = append(moves, m)
-	}
-
-	return moves
-}
-func (bishop *Bishop) GetCode() int {
-	return bishop.Code
-}
-
-func (bishop *Bishop) GetColor() Color {
-	return bishop.Color
+func NewBishop(s *Square, c Color) (*Bishop, error) {
+	var bishop Bishop
+	bishop.ID = uuid.NewV4().String()
+	bishop.Name = "Bishop"
+	bishop.Color = c
+	bishop.Position = s
+	bishop.Type = BishopType
+	return &bishop, nil
 }
 
 func (bishop *Bishop) CurrentPosition() *Square {
 	return bishop.Position
 }
+
+func (bishop *Bishop)PieceColor() Color {
+	return bishop.Color
+}
+
+func (bishop *Bishop)PieceType() PieceType {
+	return bishop.Type
+}
+
+func (bishop *Bishop) ValidMoves(board *Board) []*Move {
+	var moves []*Move
+
+	cFile := bishop.CurrentPosition().File
+	cRank := bishop.CurrentPosition().Rank
+
+	//up right
+	for i := 1; i <= 8; i++ {
+		if cFile + i <= 8 && cRank + i <= 8 {
+			d := board.GetSquare(cFile + i, cRank + i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//up left
+	for i := 1; i <= 8; i++ {
+		if cFile - i >= 1 && cRank + i <= 8 {
+			d := board.GetSquare(cFile - i, cRank + i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+
+		}
+	}
+
+	//down right
+	for i := 1; i <= 8; i++ {
+		if cFile + i <= 8 && cRank - i >= 1 {
+			d := board.GetSquare(cFile + i, cRank - i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	//down right
+	for i := 1; i <= 8; i++ {
+		if cFile - i >= 1 && cRank - i >= 1 {
+			d := board.GetSquare(cFile - i, cRank - i)
+			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
+				moves = append(moves, m)
+			}
+			if d.CurrentPiece != nil {
+				break
+			}
+		}
+	}
+
+	return moves
+}
+

@@ -6,25 +6,13 @@ import (
 )
 
 func main() {
+	board, _ := chess.NewEmptyBoard()
+	chess.NewFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 20 21").Apply(board)
 
-	b := chess.NewBoard()
-	//for i, s := range *b.Squares {
-	//	if s != nil && s.Piece != nil {
-	//		//fmt.Println(i, s.Name, s.Piece.Name)
-	//	}
-	//}
-	fmt.Println()
-	fmt.Println()
-	for i, s := range *b.Squares {
-		if s.ChessPiece != nil {
-			for j , move :=range s.ChessPiece.ValidMoves(b){
-				if move!=nil{
-					fmt.Println(i, s.Name, fmt.Sprint(s.ChessPiece), j, move.Name(), move.IsCaptureMove)
-				}
-
-			}
-		}
-	}
-
+	fmt.Println("board.ActiveColor", board.ActiveColor)
+	fmt.Println("board.CastlingRights", board.CastlingRights)
+	fmt.Println(board.EnPassantSquare)
+	fmt.Println(board.HalfMoveClock)
+	fmt.Println(board.FullMoveNumber)
 
 }

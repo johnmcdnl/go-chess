@@ -1,31 +1,28 @@
 package chess
 
+type Basic struct {
+	ID       string
+	Color    Color
+	Name     string
+	Position *Square
+	Type     PieceType
+}
+
+type PieceType int
+
 const (
-	_ = iota
-	PawnPiece
-	KnightPiece
-	BishopPiece
-	RookPiece
-	QueenPiece
-	KingPiece
+	_ = PieceType(iota)
+	KingType
+	QueenType
+	RookType
+	BishopType
+	KnightType
+	PawnType
 )
 
-type ChessPiece interface {
+type Piece interface {
 	ValidMoves(b *Board) []*Move
-	GetCode() int
-	GetColor() Color
 	CurrentPosition() *Square
-}
-
-type Piece struct {
-	Name     string
-	Code     int
-	Color    Color
-	Position *Square
-}
-
-func NewPiece(name string) *Piece {
-	var p Piece
-	p.Name = name
-	return &p
+	PieceColor() Color
+	PieceType() PieceType
 }
