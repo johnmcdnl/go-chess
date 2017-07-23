@@ -14,7 +14,7 @@ type CastlingRights struct {
 type Board struct {
 	Squares         []*Square
 	ActiveColor     Color
-	CastlingRights  CastlingRights
+	CastlingRights  *CastlingRights
 	EnPassantSquare *Square
 	HalfMoveClock   int
 	FullMoveNumber  int
@@ -27,7 +27,7 @@ func NewEmptyBoard() (*Board, error) {
 		return nil, err
 	}
 	b.ActiveColor = White
-	b.CastlingRights = CastlingRights{
+	b.CastlingRights = &CastlingRights{
 		WhiteKingSideAvailable:true,
 		WhiteQueenSideAvailable:true,
 		BlackKingSideAvailable:true,

@@ -35,10 +35,6 @@ func (f *FEN)Apply(b *Board) {
 		fenPiecePlacements = append(fenPiecePlacements, p)
 	}
 
-
-	//TODO board info stuff
-	fmt.Println(boardInfo)
-
 	reverse := func(ss []string) {
 		last := len(ss) - 1
 		for i := 0; i < len(ss) / 2; i++ {
@@ -46,10 +42,6 @@ func (f *FEN)Apply(b *Board) {
 		}
 	}
 	reverse(fenPiecePlacements)
-
-	for i, s := range b.Squares {
-		fmt.Println(i, s)
-	}
 
 	boardIndex := 1
 	for fenRank, fenPiecePlacement := range fenPiecePlacements {
@@ -96,8 +88,54 @@ func (f *FEN)Apply(b *Board) {
 
 	}
 
-	for i, s := range b.Squares {
-		fmt.Println(i, s)
+	//TODO board info stuff
+	fmt.Println(boardInfo)
+	fmt.Println()
+	fmt.Println()
+	boardInfoArray := strings.Split(boardInfo, " ")
+
+	switch boardInfoArray[0] {
+	default:
+		panic("unknown color")
+	case "w":
+		b.ActiveColor = White
+	case "b":
+		b.ActiveColor = Black
 	}
+
+	fmt.Println(boardInfoArray[1])
+	//Castling rights
+	var castlingRights = CastlingRights{
+		WhiteKingSideAvailable:false,
+		WhiteQueenSideAvailable : false,
+		BlackKingSideAvailable : false,
+		BlackQueenSideAvailable : false,
+	}
+	for _, cr := range boardInfoArray[1] {
+		switch string(cr) {
+		default:
+			panic("unknown castling rights")
+		case "-":
+			castlingRights.WhiteKingSideAvailable = false
+			castlingRights.WhiteQueenSideAvailable = false
+			castlingRights.BlackKingSideAvailable = false
+			castlingRights.BlackQueenSideAvailable = false
+		case "K":
+			castlingRights.WhiteKingSideAvailable = true
+		case "Q":
+			castlingRights.WhiteQueenSideAvailable = true
+		case "k":
+			castlingRights.BlackKingSideAvailable = true
+		case "q":
+			castlingRights.BlackQueenSideAvailable = true
+		}
+	}
+	b.CastlingRights=&castlingRights
+
+	fmt.Println(boardInfoArray[2])
+	fmt.Println(boardInfoArray[3])
+	fmt.Println(boardInfoArray[4])
+	fmt.Println()
+	fmt.Println()
 
 }

@@ -1,31 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"github.com/johnmcdnl/go-chess/chess"
+	"fmt"
 )
 
 func main() {
-	fmt.Println()
-	fmt.Println()
-	fmt.Println()
-	b, err := chess.NewBoard()
-	fmt.Println(err)
+	board, _ := chess.NewEmptyBoard()
+	chess.NewFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - - 0 1").Apply(board)
 
-	for i, s := range b.Squares {
-		fmt.Println(i, s.File, s.Rank, s.CurrentPiece)
-	}
-	fmt.Println()
-	fmt.Println()
-	fmt.Println()
-	for _, s := range b.Squares {
-		if s.CurrentPiece != nil && s.CurrentPiece.PieceType()==chess.RookType{
-			fmt.Println()
-			for _, m:=range s.CurrentPiece.ValidMoves(b){
-				fmt.Println(m.Printer())
-			}
-			fmt.Println()
-		}
-	}
+	fmt.Println("board.ActiveColor", board.ActiveColor)
+	fmt.Println("board.CastlingRights", board.CastlingRights)
+	//fmt.Println(board.EnPassantSquare)
+	//fmt.Println(board.HalfMoveClock)
+	//fmt.Println(board.FullMoveNumber)
 
 }
