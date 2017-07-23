@@ -88,10 +88,6 @@ func (f *FEN)Apply(b *Board) {
 
 	}
 
-	//TODO board info stuff
-	fmt.Println(boardInfo)
-	fmt.Println()
-	fmt.Println()
 	boardInfoArray := strings.Split(boardInfo, " ")
 
 	switch boardInfoArray[0] {
@@ -103,7 +99,6 @@ func (f *FEN)Apply(b *Board) {
 		b.ActiveColor = Black
 	}
 
-	fmt.Println(boardInfoArray[1])
 	//Castling rights
 	var castlingRights = CastlingRights{
 		WhiteKingSideAvailable:false,
@@ -130,12 +125,41 @@ func (f *FEN)Apply(b *Board) {
 			castlingRights.BlackQueenSideAvailable = true
 		}
 	}
-	b.CastlingRights=&castlingRights
+	b.CastlingRights = &castlingRights
 
-	fmt.Println(boardInfoArray[2])
-	fmt.Println(boardInfoArray[3])
-	fmt.Println(boardInfoArray[4])
-	fmt.Println()
-	fmt.Println()
 
+	//en passant
+	if boardInfoArray[2] == "-" {
+		b.EnPassantSquare = nil
+	} else {
+		enPassantFileRankArr := strings.Split(boardInfoArray[2], "")
+		fmt.Println(enPassantFileRankArr)
+
+		enPassantRank, _ := strconv.Atoi(enPassantFileRankArr[1])
+
+		switch strings.ToLower(enPassantFileRankArr[0]) {
+		default:
+			panic("unknown")
+		case "a":
+			b.EnPassantSquare = b.GetSquare(A, enPassantRank)
+		case "b":
+			b.EnPassantSquare = b.GetSquare(B, enPassantRank)
+		case "c":
+			b.EnPassantSquare = b.GetSquare(C, enPassantRank)
+		case "d":
+			b.EnPassantSquare = b.GetSquare(D, enPassantRank)
+		case "e":
+			b.EnPassantSquare = b.GetSquare(E, enPassantRank)
+		case "f":
+			b.EnPassantSquare = b.GetSquare(F, enPassantRank)
+		case "g":
+			b.EnPassantSquare = b.GetSquare(G, enPassantRank)
+		case "h":
+			b.EnPassantSquare = b.GetSquare(H, enPassantRank)
+		}
+
+	}
+
+	b.HalfMoveClock, _ = strconv.Atoi(boardInfoArray[3])
+	b.FullMoveNumber, _ = strconv.Atoi(boardInfoArray[4])
 }
