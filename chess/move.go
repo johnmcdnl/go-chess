@@ -40,10 +40,7 @@ func (m *Move)PGNName() string {
 	var pieceNameCode string
 	switch m.Origin.CurrentPiece.PieceType() {
 	default:
-		fmt.Println(m.Origin.CurrentPiece.PieceType())
-		fmt.Println(m.Origin.CurrentPiece.CurrentPosition())
-		fmt.Println(m.Origin.CurrentPiece.PieceColor())
-		return fmt.Sprintln("I AM INVALID")
+		panic("error")
 	case KingType:
 		pieceNameCode = "K"
 	case QueenType:
@@ -63,7 +60,7 @@ func (m *Move)PGNName() string {
 	if m.IsCapturingMove() {
 		isCapture = "x"
 	}
-	return fmt.Sprintf("%s%s%s%s", pieceNameCode, strings.ToLower(m.Origin.Name()), isCapture, strings.ToLower(m.Destination.Name()))
+	return fmt.Sprintf("%s%s%s%s", pieceNameCode, strings.ToLower(m.Origin.Name()), isCapture,  strings.ToLower(m.Destination.Name()))
 }
 
 func (m *Move)IsCapturingMove()bool{
