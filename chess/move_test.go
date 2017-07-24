@@ -2,7 +2,6 @@ package chess
 
 import (
 	"testing"
-	"fmt"
 )
 
 func TestMove_PGNName(t *testing.T) {
@@ -33,10 +32,6 @@ func TestMove_PGNName(t *testing.T) {
 			m := &Move{
 				Origin:      tt.fields.board.GetSquare(tt.fields.Origin.File, tt.fields.Origin.Rank),
 				Destination: tt.fields.board.GetSquare(tt.fields.Destination.File, tt.fields.Destination.Rank),
-			}
-
-			for i, s := range tt.fields.board.Squares {
-				fmt.Println(i, s.File, s.Rank, s.CurrentPiece)
 			}
 
 			if got := m.PGNName(); got != tt.want {

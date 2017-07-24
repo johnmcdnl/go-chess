@@ -17,6 +17,7 @@ func NewFEN(f string) *FEN {
 }
 
 func (f *FEN) IsValid() bool {
+	//TODO
 	return true
 }
 
