@@ -88,13 +88,17 @@ func (b *Board) LoadFromFEN(f FEN) error {
 }
 
 func (b *Board) GetSquare(file, rank int) *Square {
-	for _, s := range b.Squares {
-		if s.File == file && s.Rank == rank {
-			return s
-		}
+
+	if file < 1 || file > 8 || rank < 1 || rank > 8 {
+		return nil
 	}
 
-	return nil
+	id := ((rank - 1) * 8) + file - 1
+	if id < 0 || id > 63 {
+		return nil
+	}
+
+	return b.Squares[id]
 }
 
 func (b *Board)Print() {
