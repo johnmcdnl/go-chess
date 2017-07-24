@@ -8,12 +8,6 @@
   version = "v1.1.0"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/gucumber/gucumber"
-  packages = [".","gherkin"]
-  revision = "71608e2f6e76fd4da5b09a376aeec7a5c0b5edbc"
-
-[[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
@@ -26,12 +20,6 @@
   version = "v1.1.0"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/shiena/ansicolor"
-  packages = ["."]
-  revision = "a422bbe96644373c5753384a59d678f7d261ff10"
-
-[[projects]]
   name = "github.com/stretchr/testify"
   packages = ["assert"]
   revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
@@ -40,6 +28,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9426c2dd1007d499a0089a3b0c908ad36287ddd2045539809a6c0452b343dfae"
+  inputs-digest = "357baa01a3dbdaf035bb6a50ca499312a478109d809721c5142925e129274fe3"
   solver-name = "gps-cdcl"
   solver-version = 1
