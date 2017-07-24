@@ -1,6 +1,8 @@
 package chess
 
-import "github.com/satori/go.uuid"
+import (
+	"github.com/satori/go.uuid"
+)
 
 type Queen struct {
 	BasePiece
@@ -88,52 +90,6 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 			}
 		}
 	}
-
-	//up
-	for rank := q.Position.Rank + 1; rank <= 8; rank++ {
-		d := b.GetSquare(q.CurrentPosition().File, rank)
-		if m := NewMove(q.CurrentPosition(), d); m != nil {
-			moves = append(moves, m)
-		}
-		if d.CurrentPiece != nil {
-			break
-		}
-	}
-
-	//up
-	for rank := q.Position.Rank - 1; rank >= 1; rank-- {
-		d := b.GetSquare(q.CurrentPosition().File, rank)
-		if m := NewMove(q.CurrentPosition(), d); m != nil {
-			moves = append(moves, m)
-		}
-		if d.CurrentPiece != nil {
-			break
-		}
-	}
-
-
-	//right
-	for file := q.Position.File + 1; file <= 8; file++ {
-		d := b.GetSquare(file, q.CurrentPosition().Rank)
-		if m := NewMove(q.CurrentPosition(), d); m != nil {
-			moves = append(moves, m)
-		}
-		if d.CurrentPiece != nil {
-			break
-		}
-	}
-
-	//right
-	for file := q.Position.File - 1; file >= 1; file-- {
-		d := b.GetSquare(file, q.CurrentPosition().Rank)
-		if m := NewMove(q.CurrentPosition(), d); m != nil {
-			moves = append(moves, m)
-		}
-		if d.CurrentPiece != nil {
-			break
-		}
-	}
-
 	return moves
 }
 
