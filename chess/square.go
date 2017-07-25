@@ -20,6 +20,7 @@ type Coordinate struct {
 }
 
 type Square struct {
+	ID           int
 	Coordinate
 	CurrentPiece Piece
 }
@@ -28,7 +29,20 @@ func NewSquare(file, rank int) (*Square, error) {
 	var s Square
 	s.File = file
 	s.Rank = rank
+	s.ID = GetSquareID(file, rank)
 	return &s, nil
+}
+
+func GetSquareID(file, rank int) int {
+	if file < 1 || file > 8 || rank < 1 || rank > 8 {
+		return -1
+	}
+
+	id := ((rank - 1) * 8) + file - 1
+	if id < 0 || id > 63 {
+		return -1
+	}
+	return id
 }
 
 func (s *Square) SetPiece(p Piece) {
