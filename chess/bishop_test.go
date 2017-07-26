@@ -74,6 +74,7 @@ func TestBishop_ValidMoves(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			bishop := tt.args.b.GetSquare(tt.fields.Coordinate.File, tt.fields.Coordinate.Rank).CurrentPiece
 			aMoves := bishop.ValidMoves(tt.args.b)
+			assert.Equal(t, BishopType, bishop.PieceType(), "Wrong piece type")
 
 			assert.Equal(t, len(tt.want), len(aMoves), "Incorrect Number of Moves")
 
