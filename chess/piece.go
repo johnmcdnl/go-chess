@@ -25,4 +25,5 @@ type Piece interface {
 	CurrentPosition() *Square
 	PieceColor() Color
 	PieceType() PieceType
+	Move(b *Board, newPosition Coordinate)
 }

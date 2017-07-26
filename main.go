@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
-	board, _ := chess.NewEmptyBoard()
-	chess.NewFEN("k1r4P/1r1r2P1/r3rP2/4Pr2/3P2r1/2P4r/1P2K1r1/P4r2 w - - 0 1").Apply(board)
+	game := chess.NewGame()
+	fmt.Println(game)
+	board := game.Board
 
 	fmt.Println("board.ActiveColor", board.ActiveColor)
 	fmt.Println("board.CastlingRights", board.CastlingRights)
@@ -15,5 +16,21 @@ func main() {
 	fmt.Println(board.HalfMoveClock)
 	fmt.Println(board.FullMoveNumber)
 
+	var turn = 1
+	for i := 0; i <= 50; i++ {
+		move := game.Players[i % 2].PickMove(game.Board)
+		fmt.Println(turn, " ", move.PGNName())
+		move.Apply(game.Board)
+
+		if i % 2 == 0 {
+			turn++
+			board.Print()
+			fmt.Println()
+			fmt.Println()
+			fmt.Println()
+		}
+	}
+
 	board.Print()
+
 }

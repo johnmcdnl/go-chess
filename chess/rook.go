@@ -30,6 +30,11 @@ func (r *Rook) PieceType() PieceType {
 	return r.Type
 }
 
+func (r *Rook)Move(b *Board, c Coordinate) {
+	r.Position = b.GetSquare(c.File, c.Rank)
+	b.GetSquare(c.File, c.Rank).CurrentPiece = r
+}
+
 func (r *Rook) ValidMoves(b *Board) []*Move {
 	var moves []*Move
 
