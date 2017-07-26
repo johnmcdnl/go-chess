@@ -79,6 +79,7 @@ func TestQueen_ValidMoves(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			queen := tt.args.b.GetSquare(tt.fields.Coordinate.File, tt.fields.Coordinate.Rank).CurrentPiece
 			aMoves := queen.ValidMoves(tt.args.b)
+			assert.Equal(t, QueenType, queen.PieceType(), "Wrong piece type")
 
 			assert.Equal(t, len(tt.want), len(aMoves), "Incorrect Number of Moves")
 

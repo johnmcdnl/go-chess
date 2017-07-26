@@ -70,6 +70,7 @@ func TestKnight_ValidMoves(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			knight := tt.args.b.GetSquare(tt.fields.Coordinate.File, tt.fields.Coordinate.Rank).CurrentPiece
 			aMoves := knight.ValidMoves(tt.args.b)
+			assert.Equal(t, KnightType, knight.PieceType(), "Wrong piece type")
 
 			assert.Equal(t, len(tt.want), len(aMoves), "Incorrect Number of Moves")
 
