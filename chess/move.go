@@ -8,6 +8,7 @@ import (
 type Move struct {
 	Origin      *Square
 	Destination *Square
+
 }
 
 //New returns a Move or and error if the provided squares are invalid
@@ -32,6 +33,10 @@ func (m *Move) Printer() string {
 }
 
 func (m *Move) PGNName() string {
+
+	if m.Origin == nil {
+		return "Origin NIL"
+	}
 
 	if m.Origin.CurrentPiece == nil {
 		return "I AM NIL"
@@ -84,6 +89,8 @@ func (m *Move) IsCapturingMove() bool {
 
 func (m *Move) IsValid() bool {
 
+
+
 	if m.Destination.CurrentPiece == nil {
 		return true
 	}
@@ -103,6 +110,18 @@ func (m *Move) IsValid() bool {
 	return true
 }
 
-func (m *Move) Apply() {
+func (m *Move) Apply(b *Board) error {
+	if m.Origin == nil {
+		return fmt.Errorf("Origin %s is nil ", m.Origin.Name())
+	}
 
+	if !m.IsValid() {
+		return fmt.Errorf("Move %s is invalid ", m.PGNName())
+	}
+
+
+	m.Origin.CurrentPiece.Move(b, m.Destination.Coordinate)
+	m.Origin.CurrentPiece=nil
+
+	return nil
 }

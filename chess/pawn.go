@@ -28,6 +28,11 @@ func (p *Pawn) PieceType() PieceType {
 	return p.Type
 }
 
+func (p *Pawn)Move(b *Board, c Coordinate) {
+	p.Position = b.GetSquare(c.File, c.Rank)
+	b.GetSquare(c.File, c.Rank).CurrentPiece = p
+}
+
 func (p *Pawn) ValidMoves(b *Board) []*Move {
 	var moves []*Move
 

@@ -28,6 +28,11 @@ func (k *King) PieceType() PieceType {
 	return k.Type
 }
 
+func (k *King)Move(b *Board, c Coordinate) {
+	k.Position = b.GetSquare(c.File, c.Rank)
+	b.GetSquare(c.File, c.Rank).CurrentPiece = k
+}
+
 func (k *King) ValidMoves(b *Board) []*Move {
 	var moves []*Move
 

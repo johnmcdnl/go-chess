@@ -30,6 +30,11 @@ func (k *Knight) PieceType() PieceType {
 	return k.Type
 }
 
+func (k *Knight)Move(b *Board, c Coordinate) {
+	k.Position = b.GetSquare(c.File, c.Rank)
+	b.GetSquare(c.File, c.Rank).CurrentPiece = k
+}
+
 func (k *Knight) ValidMoves(b *Board) []*Move {
 
 	var moves []*Move
