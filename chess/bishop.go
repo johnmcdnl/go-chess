@@ -22,11 +22,11 @@ func (bishop *Bishop) CurrentPosition() *Square {
 	return bishop.Position
 }
 
-func (bishop *Bishop)PieceColor() Color {
+func (bishop *Bishop) PieceColor() Color {
 	return bishop.Color
 }
 
-func (bishop *Bishop)PieceType() PieceType {
+func (bishop *Bishop) PieceType() PieceType {
 	return bishop.Type
 }
 
@@ -38,8 +38,8 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 
 	//up right
 	for i := 1; i <= 8; i++ {
-		if cFile + i <= 8 && cRank + i <= 8 {
-			d := board.GetSquare(cFile + i, cRank + i)
+		if cFile+i <= 8 && cRank+i <= 8 {
+			d := board.GetSquare(cFile+i, cRank+i)
 			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 
@@ -52,8 +52,8 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 
 	//up left
 	for i := 1; i <= 8; i++ {
-		if cFile - i >= 1 && cRank + i <= 8 {
-			d := board.GetSquare(cFile - i, cRank + i)
+		if cFile-i >= 1 && cRank+i <= 8 {
+			d := board.GetSquare(cFile-i, cRank+i)
 			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 
@@ -67,8 +67,8 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 
 	//down right
 	for i := 1; i <= 8; i++ {
-		if cFile + i <= 8 && cRank - i >= 1 {
-			d := board.GetSquare(cFile + i, cRank - i)
+		if cFile+i <= 8 && cRank-i >= 1 {
+			d := board.GetSquare(cFile+i, cRank-i)
 			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 			}
@@ -80,8 +80,8 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 
 	//down right
 	for i := 1; i <= 8; i++ {
-		if cFile - i >= 1 && cRank - i >= 1 {
-			d := board.GetSquare(cFile - i, cRank - i)
+		if cFile-i >= 1 && cRank-i >= 1 {
+			d := board.GetSquare(cFile-i, cRank-i)
 			if m := NewMove(bishop.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 			}
@@ -93,4 +93,3 @@ func (bishop *Bishop) ValidMoves(board *Board) []*Move {
 
 	return moves
 }
-

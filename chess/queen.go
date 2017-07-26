@@ -22,11 +22,11 @@ func (q *Queen) CurrentPosition() *Square {
 	return q.Position
 }
 
-func (q *Queen)PieceColor() Color {
+func (q *Queen) PieceColor() Color {
 	return q.Color
 }
 
-func (q *Queen)PieceType() PieceType {
+func (q *Queen) PieceType() PieceType {
 	return q.Type
 }
 
@@ -38,8 +38,8 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 
 	//up right
 	for i := 1; i <= 8; i++ {
-		if cFile + i <= 8 && cRank + i <= 8 {
-			d := b.GetSquare(cFile + i, cRank + i)
+		if cFile+i <= 8 && cRank+i <= 8 {
+			d := b.GetSquare(cFile+i, cRank+i)
 			if m := NewMove(q.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 
@@ -52,8 +52,8 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 
 	//up left
 	for i := 1; i <= 8; i++ {
-		if cFile - i >= 1 && cRank + i <= 8 {
-			d := b.GetSquare(cFile - i, cRank + i)
+		if cFile-i >= 1 && cRank+i <= 8 {
+			d := b.GetSquare(cFile-i, cRank+i)
 			if m := NewMove(q.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 
@@ -67,8 +67,8 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 
 	//down right
 	for i := 1; i <= 8; i++ {
-		if cFile + i <= 8 && cRank - i >= 1 {
-			d := b.GetSquare(cFile + i, cRank - i)
+		if cFile+i <= 8 && cRank-i >= 1 {
+			d := b.GetSquare(cFile+i, cRank-i)
 			if m := NewMove(q.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 			}
@@ -80,8 +80,8 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 
 	//down left
 	for i := 1; i <= 8; i++ {
-		if cFile - i >= 1 && cRank - i >= 1 {
-			d := b.GetSquare(cFile - i, cRank - i)
+		if cFile-i >= 1 && cRank-i >= 1 {
+			d := b.GetSquare(cFile-i, cRank-i)
 			if m := NewMove(q.CurrentPosition(), d); m != nil {
 				moves = append(moves, m)
 			}
@@ -90,7 +90,6 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 			}
 		}
 	}
-
 
 	//up
 	for rank := q.Position.Rank + 1; rank <= 8; rank++ {
@@ -113,7 +112,6 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 			break
 		}
 	}
-
 
 	//right
 	for file := q.Position.File + 1; file <= 8; file++ {
@@ -139,4 +137,3 @@ func (q *Queen) ValidMoves(b *Board) []*Move {
 
 	return moves
 }
-

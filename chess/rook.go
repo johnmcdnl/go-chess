@@ -18,15 +18,15 @@ func NewRook(s *Square, c Color) (*Rook, error) {
 	return &r, nil
 }
 
-func (r*Rook) CurrentPosition() *Square {
+func (r *Rook) CurrentPosition() *Square {
 	return r.Position
 }
 
-func (r *Rook)PieceColor() Color {
+func (r *Rook) PieceColor() Color {
 	return r.Color
 }
 
-func (r *Rook)PieceType() PieceType {
+func (r *Rook) PieceType() PieceType {
 	return r.Type
 }
 
@@ -55,7 +55,6 @@ func (r *Rook) ValidMoves(b *Board) []*Move {
 		}
 	}
 
-
 	//right
 	for file := r.Position.File + 1; file <= 8; file++ {
 		d := b.GetSquare(file, r.CurrentPosition().Rank)
@@ -80,4 +79,3 @@ func (r *Rook) ValidMoves(b *Board) []*Move {
 
 	return moves
 }
-

@@ -2,6 +2,7 @@ package chess
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -65,7 +66,7 @@ func TestQueen_ValidMoves(t *testing.T) {
 			"Queen Capturing in multiple directions",
 			fields{Coordinate{D, 5}},
 			args{b: boardFEN("3Kk3/1P6/3pP3/2pqp3/2P5/2PP1P2/8/8 w - - 0 1")},
-			[]string{"Qd5c6","Qd5xb7","Qd5xe6", "Qd5e4", "Qd5xf3", "Qd5d4", "Qd5xd3", "Qd5xc4"},
+			[]string{"Qd5c6", "Qd5xb7", "Qd5xe6", "Qd5e4", "Qd5xf3", "Qd5d4", "Qd5xd3", "Qd5xc4"},
 		},
 		{
 			"Queen cannot capture a king",
@@ -73,7 +74,6 @@ func TestQueen_ValidMoves(t *testing.T) {
 			args{b: boardFEN("8/1P6/2KpP3/2pqk3/2P5/2PP1P2/8/8 w - - 0 1")},
 			[]string{"Qd5xe6", "Qd5e4", "Qd5xf3", "Qd5d4", "Qd5xd3", "Qd5xc4"},
 		},
-
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

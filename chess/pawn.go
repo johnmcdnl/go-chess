@@ -20,11 +20,11 @@ func (p *Pawn) CurrentPosition() *Square {
 	return p.Position
 }
 
-func (p *Pawn)PieceColor() Color {
+func (p *Pawn) PieceColor() Color {
 	return p.Color
 }
 
-func (p *Pawn)PieceType() PieceType {
+func (p *Pawn) PieceType() PieceType {
 	return p.Type
 }
 
@@ -33,4 +33,3 @@ func (p *Pawn) ValidMoves(b *Board) []*Move {
 
 	return moves
 }
-

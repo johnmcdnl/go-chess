@@ -6,8 +6,8 @@ import (
 )
 
 type Move struct {
-	Origin          *Square
-	Destination     *Square
+	Origin      *Square
+	Destination *Square
 }
 
 //New returns a Move or and error if the provided squares are invalid
@@ -31,7 +31,7 @@ func (m *Move) Printer() string {
 	return fmt.Sprint("Origin: ", m.Origin.PrettyPrint(), " Destination: ", m.Destination.PrettyPrint())
 }
 
-func (m *Move)PGNName() string {
+func (m *Move) PGNName() string {
 
 	if m.Origin.CurrentPiece == nil {
 		return "I AM NIL"
@@ -60,22 +60,22 @@ func (m *Move)PGNName() string {
 	if m.IsCapturingMove() {
 		isCapture = "x"
 	}
-	return fmt.Sprintf("%s%s%s%s", pieceNameCode, strings.ToLower(m.Origin.Name()), isCapture,  strings.ToLower(m.Destination.Name()))
+	return fmt.Sprintf("%s%s%s%s", pieceNameCode, strings.ToLower(m.Origin.Name()), isCapture, strings.ToLower(m.Destination.Name()))
 }
 
-func (m *Move)IsCapturingMove()bool{
-	if m.Destination.CurrentPiece==nil{
+func (m *Move) IsCapturingMove() bool {
+	if m.Destination.CurrentPiece == nil {
 		return false
 	}
-	if m.Destination.CurrentPiece.PieceColor() == m.Origin.CurrentPiece.PieceColor(){
-		return false
-	}
-
-	if m.Destination.CurrentPiece.PieceType()==KingType{
+	if m.Destination.CurrentPiece.PieceColor() == m.Origin.CurrentPiece.PieceColor() {
 		return false
 	}
 
-	if m.Destination.CurrentPiece!=nil{
+	if m.Destination.CurrentPiece.PieceType() == KingType {
+		return false
+	}
+
+	if m.Destination.CurrentPiece != nil {
 		return true
 	}
 	panic("I missed something obvious")
