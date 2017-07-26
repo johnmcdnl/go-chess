@@ -20,7 +20,7 @@ type Coordinate struct {
 }
 
 type Square struct {
-	ID           int
+	ID int
 	Coordinate
 	CurrentPiece Piece
 }
@@ -49,18 +49,26 @@ func (s *Square) SetPiece(p Piece) {
 	s.CurrentPiece = p
 }
 
-func (s *Square)PrettyPrint() string {
+func (s *Square) PrettyPrint() string {
 	var str string
 
 	switch s.File {
-	case 1: str += "a"
-	case 2:str += "b"
-	case 3:str += "c"
-	case 4:str += "d"
-	case 5:str += "e"
-	case 6:str += "f"
-	case 7:str += "g"
-	case 8:str += "h"
+	case 1:
+		str += "a"
+	case 2:
+		str += "b"
+	case 3:
+		str += "c"
+	case 4:
+		str += "d"
+	case 5:
+		str += "e"
+	case 6:
+		str += "f"
+	case 7:
+		str += "g"
+	case 8:
+		str += "h"
 	}
 
 	str += fmt.Sprint(s.Rank)
@@ -68,18 +76,26 @@ func (s *Square)PrettyPrint() string {
 	return str
 }
 
-func (s *Square)Name() string {
+func (s *Square) Name() string {
 	var str string
 
 	switch s.File {
-	case 1: str += "a"
-	case 2:str += "b"
-	case 3:str += "c"
-	case 4:str += "d"
-	case 5:str += "e"
-	case 6:str += "f"
-	case 7:str += "g"
-	case 8:str += "h"
+	case 1:
+		str += "a"
+	case 2:
+		str += "b"
+	case 3:
+		str += "c"
+	case 4:
+		str += "d"
+	case 5:
+		str += "e"
+	case 6:
+		str += "f"
+	case 7:
+		str += "g"
+	case 8:
+		str += "h"
 	}
 
 	str += fmt.Sprint(s.Rank)

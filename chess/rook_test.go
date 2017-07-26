@@ -2,6 +2,7 @@ package chess
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,8 +47,8 @@ func TestRook_ValidMoves(t *testing.T) {
 			fields{Coordinate{A, 8}},
 			args{b: boardFEN("r7/3Kk3/8/8/8/8/8/8 w - - 0 1")},
 			[]string{
-				"Ra8a1", "Ra8a2","Ra8a3", "Ra8a4","Ra8a5", "Ra8a6","Ra8a7",
-				"Ra8b8","Ra8c8", "Ra8d8","Ra8e8", "Ra8f8","Ra8g8", "Ra8h8",
+				"Ra8a1", "Ra8a2", "Ra8a3", "Ra8a4", "Ra8a5", "Ra8a6", "Ra8a7",
+				"Ra8b8", "Ra8c8", "Ra8d8", "Ra8e8", "Ra8f8", "Ra8g8", "Ra8h8",
 			},
 		},
 		{
@@ -77,7 +78,6 @@ func TestRook_ValidMoves(t *testing.T) {
 			args{b: boardFEN("8/1P6/2KpP3/2prk3/2P5/2PP1P2/8/8 w - - 0 1")},
 			[]string{"Rd5d4", "Rd5xd3"},
 		},
-
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

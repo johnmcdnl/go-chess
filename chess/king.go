@@ -20,43 +20,42 @@ func (k *King) CurrentPosition() *Square {
 	return k.Position
 }
 
-func (k *King)PieceColor() Color {
+func (k *King) PieceColor() Color {
 	return k.Color
 }
 
-func (k *King)PieceType() PieceType {
+func (k *King) PieceType() PieceType {
 	return k.Type
 }
 
 func (k *King) ValidMoves(b *Board) []*Move {
 	var moves []*Move
 
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 1, k.CurrentPosition().Rank + 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File-1, k.CurrentPosition().Rank+1)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 0, k.CurrentPosition().Rank + 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File+0, k.CurrentPosition().Rank+1)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 1, k.CurrentPosition().Rank + 1)); m != nil {
-		moves = append(moves, m)
-	}
-
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 1, k.CurrentPosition().Rank)); m != nil {
-		moves = append(moves, m)
-	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 1, k.CurrentPosition().Rank)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File+1, k.CurrentPosition().Rank+1)); m != nil {
 		moves = append(moves, m)
 	}
 
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File - 1, k.CurrentPosition().Rank - 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File+1, k.CurrentPosition().Rank)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 0, k.CurrentPosition().Rank - 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File-1, k.CurrentPosition().Rank)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File + 1, k.CurrentPosition().Rank - 1)); m != nil {
+
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File-1, k.CurrentPosition().Rank-1)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File+0, k.CurrentPosition().Rank-1)); m != nil {
+		moves = append(moves, m)
+	}
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(k.CurrentPosition().File+1, k.CurrentPosition().Rank-1)); m != nil {
 		moves = append(moves, m)
 	}
 	return moves
 }
-

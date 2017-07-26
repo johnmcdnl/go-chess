@@ -22,11 +22,11 @@ func (k *Knight) CurrentPosition() *Square {
 	return k.Position
 }
 
-func (k *Knight)PieceColor() Color {
+func (k *Knight) PieceColor() Color {
 	return k.Color
 }
 
-func (k *Knight)PieceType() PieceType {
+func (k *Knight) PieceType() PieceType {
 	return k.Type
 }
 
@@ -37,28 +37,28 @@ func (k *Knight) ValidMoves(b *Board) []*Move {
 	cFile := k.CurrentPosition().File
 	cRank := k.CurrentPosition().Rank
 
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile + 2, cRank + 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile+2, cRank+1)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile + 2, cRank - 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile+2, cRank-1)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile + 1, cRank + 2)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile+1, cRank+2)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile + 1, cRank - 2)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile+1, cRank-2)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile - 1, cRank + 2)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile-1, cRank+2)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile - 1, cRank - 2)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile-1, cRank-2)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile - 2, cRank + 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile-2, cRank+1)); m != nil {
 		moves = append(moves, m)
 	}
-	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile - 2, cRank - 1)); m != nil {
+	if m := NewMove(k.CurrentPosition(), b.GetSquare(cFile-2, cRank-1)); m != nil {
 		moves = append(moves, m)
 	}
 

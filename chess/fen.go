@@ -1,8 +1,8 @@
 package chess
 
 import (
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type FEN string
@@ -21,7 +21,7 @@ func (f *FEN) IsValid() bool {
 	return true
 }
 
-func (f *FEN)Apply(b *Board) {
+func (f *FEN) Apply(b *Board) {
 	str := string(*f)
 	arr := strings.Split(str, "/")
 
@@ -41,8 +41,8 @@ func (f *FEN)Apply(b *Board) {
 
 	reverse := func(ss []string) {
 		last := len(ss) - 1
-		for i := 0; i < len(ss) / 2; i++ {
-			ss[i], ss[last - i] = ss[last - i], ss[i]
+		for i := 0; i < len(ss)/2; i++ {
+			ss[i], ss[last-i] = ss[last-i], ss[i]
 		}
 	}
 	reverse(fenPiecePlacements)
@@ -55,13 +55,13 @@ func (f *FEN)Apply(b *Board) {
 		alreadySkipped := 0
 		for fenFileIndex, fenFileData := range fenFile {
 
-			emptySquares, err := strconv.Atoi(fenFileData);
+			emptySquares, err := strconv.Atoi(fenFileData)
 			if err == nil {
 				boardIndex += emptySquares
-				alreadySkipped += emptySquares-1
+				alreadySkipped += emptySquares - 1
 			} else {
 				var p Piece
-				s := b.GetSquare(fenFileIndex + 1 + alreadySkipped, fenRank + 1)
+				s := b.GetSquare(fenFileIndex+1+alreadySkipped, fenRank+1)
 				switch fenFileData {
 				case "K":
 					p, _ = NewKing(s, White)
@@ -111,10 +111,10 @@ func (f *FEN)Apply(b *Board) {
 
 	//Castling rights
 	var castlingRights = CastlingRights{
-		WhiteKingSideAvailable:false,
-		WhiteQueenSideAvailable : false,
-		BlackKingSideAvailable : false,
-		BlackQueenSideAvailable : false,
+		WhiteKingSideAvailable:  false,
+		WhiteQueenSideAvailable: false,
+		BlackKingSideAvailable:  false,
+		BlackQueenSideAvailable: false,
 	}
 	for _, cr := range boardInfoArray[1] {
 		switch string(cr) {
@@ -136,7 +136,6 @@ func (f *FEN)Apply(b *Board) {
 		}
 	}
 	b.CastlingRights = &castlingRights
-
 
 	//en passant
 	if boardInfoArray[2] == "-" {

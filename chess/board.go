@@ -28,10 +28,10 @@ func NewEmptyBoard() (*Board, error) {
 	}
 	b.ActiveColor = White
 	b.CastlingRights = &CastlingRights{
-		WhiteKingSideAvailable:true,
-		WhiteQueenSideAvailable:true,
-		BlackKingSideAvailable:true,
-		BlackQueenSideAvailable:true,
+		WhiteKingSideAvailable:  true,
+		WhiteQueenSideAvailable: true,
+		BlackKingSideAvailable:  true,
+		BlackQueenSideAvailable: true,
 	}
 	b.EnPassantSquare = nil
 	b.HalfMoveClock = 0
@@ -101,7 +101,7 @@ func (b *Board) GetSquare(file, rank int) *Square {
 	return b.Squares[id]
 }
 
-func (b *Board)Print() {
+func (b *Board) Print() {
 	rank8 := fmt.Sprintf("8  |%s|%s|%s|%s|%s|%s|%s|%s|", sp(b.Squares[56]), sp(b.Squares[57]), sp(b.Squares[58]), sp(b.Squares[59]), sp(b.Squares[60]), sp(b.Squares[61]), sp(b.Squares[62]), sp(b.Squares[63]))
 	rank7 := fmt.Sprintf("7  |%s|%s|%s|%s|%s|%s|%s|%s|", sp(b.Squares[48]), sp(b.Squares[49]), sp(b.Squares[50]), sp(b.Squares[51]), sp(b.Squares[52]), sp(b.Squares[53]), sp(b.Squares[54]), sp(b.Squares[55]))
 	rank6 := fmt.Sprintf("6  |%s|%s|%s|%s|%s|%s|%s|%s|", sp(b.Squares[40]), sp(b.Squares[41]), sp(b.Squares[42]), sp(b.Squares[43]), sp(b.Squares[44]), sp(b.Squares[45]), sp(b.Squares[46]), sp(b.Squares[47]))
