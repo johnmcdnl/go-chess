@@ -15,16 +15,25 @@ func main() {
 	fmt.Println(board.EnPassantSquare)
 	fmt.Println(board.HalfMoveClock)
 	fmt.Println(board.FullMoveNumber)
-
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
 	var turn = 1
-	for i := 0; i <= 50; i++ {
-		move := game.Players[i % 2].PickMove(game.Board)
+	var playerColor = chess.White
+	for ply := 1; ply <= 10; ply++ {
+		move := game.Players[int(playerColor)-1].PickMove(game.Board)
 		fmt.Println(turn, " ", move.PGNName())
 		move.Apply(game.Board)
 
-		if i % 2 == 0 {
+		if playerColor==chess.White{
+			playerColor=chess.Black
+		}else{
+			playerColor=chess.White
+		}
+
+		if ply % 2 == 0 {
 			turn++
-			board.Print()
+			//board.Print()
 			fmt.Println()
 			fmt.Println()
 			fmt.Println()

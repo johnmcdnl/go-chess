@@ -8,7 +8,6 @@ import (
 type Move struct {
 	Origin      *Square
 	Destination *Square
-
 }
 
 //New returns a Move or and error if the provided squares are invalid
@@ -57,9 +56,8 @@ func (m *Move) PGNName() string {
 	case KnightType:
 		pieceNameCode = "N"
 	case PawnType:
-		pieceNameCode = "I AM A PAWN"
+		pieceNameCode = ""
 	}
-	//Qd8xd5
 
 	var isCapture = ""
 	if m.IsCapturingMove() {
@@ -88,9 +86,6 @@ func (m *Move) IsCapturingMove() bool {
 }
 
 func (m *Move) IsValid() bool {
-
-
-
 	if m.Destination.CurrentPiece == nil {
 		return true
 	}
@@ -103,8 +98,12 @@ func (m *Move) IsValid() bool {
 		return false
 	}
 
-	if m.Origin.CurrentPiece.PieceColor() != m.Destination.CurrentPiece.PieceColor() {
-		return true
+	if m.Origin.CurrentPiece.PieceType() == PawnType {
+		if m.Destination.CurrentPiece != nil {
+			if m.Origin.File == m.Destination.File {
+				return false
+			}
+		}
 	}
 
 	return true
@@ -119,9 +118,8 @@ func (m *Move) Apply(b *Board) error {
 		return fmt.Errorf("Move %s is invalid ", m.PGNName())
 	}
 
-
 	m.Origin.CurrentPiece.Move(b, m.Destination.Coordinate)
-	m.Origin.CurrentPiece=nil
+	m.Origin.CurrentPiece = nil
 
 	return nil
 }
