@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"fmt"
 )
 
 func TestPawn_ValidMoves(t *testing.T) {
@@ -25,12 +26,12 @@ func TestPawn_ValidMoves(t *testing.T) {
 		{
 			"A White Pawn may advance 2 square on it's first move",
 			fields{boardFEN(StartingPositionFEN), Coordinate{A, 2}},
-			[]string{"a2a3, a2a4"},
+			[]string{"a2a3", "a2a4"},
 		},
 		{
 			"A Black Pawn may advance 2 square on it's first move",
 			fields{boardFEN(StartingPositionFEN), Coordinate{A, 7}},
-			[]string{"a7a6, a7a5"},
+			[]string{"a7a6", "a7a5"},
 		},
 
 		{
@@ -111,12 +112,15 @@ func TestPawn_ValidMoves(t *testing.T) {
 			aMoves := pawn.ValidMoves(tt.fields.board)
 			assert.Equal(t, PawnType, pawn.PieceType(), "Wrong piece type")
 
-			assert.Equal(t, len(tt.want), len(aMoves), "Incorrect Number of Moves")
 
 			var aMovePGNS []string
 			for _, m := range aMoves {
 				aMovePGNS = append(aMovePGNS, m.PGNName())
 			}
+
+			assert.Equal(t, len(tt.want), len(aMoves), "Incorrect Number of Moves", fmt.Sprintln(tt.want), fmt.Sprintln(aMovePGNS))
+
+
 
 			for _, aMove := range aMoves {
 				assert.Contains(t, tt.want, aMove.PGNName(), "Expected Slice doesn't contain actual")
